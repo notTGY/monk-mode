@@ -1,10 +1,8 @@
 const express = require('express')
-
 const app = express()
 const port = process.env.PORT || 3000
 
-app.use(express.static('dist'))
-//app.use('/*', serveStatic({ root: './dist', }))
+app.use(express.static('./dist'))
 app.get('/api/email', (req, res) => {
   console.log(req.query)
   res.send('ok')
