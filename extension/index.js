@@ -4,6 +4,9 @@ const ctx = c.getContext('2d', { willReadFrequently: true })
 const SIZE = 15
 
 const pixelate = (image) => {
+  if (!image.complete) {
+    return
+  }
   const { width, height } = image.getBoundingClientRect()
   let w = SIZE
   let h = SIZE
@@ -42,14 +45,24 @@ const pixelate = (image) => {
   ctx.putImageData(imageData, 0, 0)
   */
 
-  image.src = c.toDataURL()
+  image.setAttribute('crossorigin', 'anonymous')
+
+  try {
+    image.src = c.toDataURL()
+    return true
+  } catch(e) {
+    console.log(e)
+  }
+  return
 }
 
 const addAttributes = () => {
   const images = document.querySelectorAll('img')
   for (const image of images) {
-    pixelate(image)
-    image.setAttribute('data-substituted', true)
+    res = pixelate(image)
+    if (res || true) {
+      image.setAttribute('data-substituted', true)
+    }
   }
 }
 

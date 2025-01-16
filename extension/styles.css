@@ -1,5 +1,5 @@
-img {
-  display: none;
+img:not([data-substituted]) {
+  display: none!important;
 }
 img[data-substituted] {
   display: unset;
