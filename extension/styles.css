@@ -1,0 +1,7 @@
+img {
+  display: none;
+}
+img[data-substituted] {
+  display: unset;
+  image-rendering: pixelated;
+}
