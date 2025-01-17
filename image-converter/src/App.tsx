@@ -103,7 +103,7 @@ export default function ImageUploader() {
               isDragActive ? 'border-primary bg-primary/10' : 'border-gray-300 hover:border-primary'
             }`}
           >
-            <input {...getInputProps()} />
+            <input id="image-drop-input" {...getInputProps()} />
             {processedImage ? (
               <img 
                 src={processedImage} 
@@ -119,13 +119,13 @@ export default function ImageUploader() {
             ) : (
               <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
             )}
-            <p className="mt-2 text-sm text-gray-600">
+            <label htmlFor="image-drop-input" className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               {isDragActive
                 ? t('card.drop.empty')
                 : imageUrl
                 ? t('card.drop.filled')
                 : t('card.drop.error')}
-            </p>
+            </label>
           </div>
           {processedImage && (
             <Button 

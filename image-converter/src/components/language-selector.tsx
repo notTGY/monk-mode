@@ -16,40 +16,38 @@ export function LanguageSelector() {
 
   return (
     <React.Fragment>
-      <div className="hidden sm:block">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <GlobeIcon className="h-5 w-5" />
-              <span>{currentLang}</span>
-              <ChevronDownIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem
-              className="flex items-center justify-between"
-              onClick={() => i18n.changeLanguage('en')}
-            >
-              <span>{t('language.en')}</span>
-              {(currentLang == 'en' || currentLang == 'en-US') ? 
-                <CheckIcon className="h-5 w-5" />
-                : null
-              }
-            </DropdownMenuItem>
-            
-            <DropdownMenuItem
-              className="flex items-center justify-between"
-              onClick={() => i18n.changeLanguage('ru')}
-            >
-              <span>{t('language.ru')}</span>
-              {currentLang == 'ru' ? 
-                <CheckIcon className="h-5 w-5" />
-                : null
-              }
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" className="flex items-center gap-2">
+            <GlobeIcon className="h-5 w-5" />
+            <span>{currentLang}</span>
+            <ChevronDownIcon className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuItem
+            className="flex items-center justify-between"
+            onClick={() => i18n.changeLanguage('en')}
+          >
+            <span>{t('language.en')}</span>
+            {(currentLang == 'en' || currentLang == 'en-US') ? 
+              <CheckIcon className="h-5 w-5" />
+              : null
+            }
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem
+            className="flex items-center justify-between"
+            onClick={() => i18n.changeLanguage('ru')}
+          >
+            <span>{t('language.ru')}</span>
+            {currentLang == 'ru' ? 
+              <CheckIcon className="h-5 w-5" />
+              : null
+            }
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </React.Fragment>
   )
 }
