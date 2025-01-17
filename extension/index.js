@@ -11,6 +11,9 @@ const addAttributes = () => {
     promises.push(pixelate(image).then(res => {
       if (res) {
         image.src = res
+        if (image.srcset) {
+          image.srcset = ''
+        }
         image.setAttribute('data-substituted', true)
       }
     }))
