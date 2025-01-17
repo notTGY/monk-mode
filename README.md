@@ -22,5 +22,6 @@ TODO: change filters
 
 ## low priority bugs
 
+TODO: support gif and videos (animated avatars and stickers in telegram)
 TODO: support background-url property. Maybe block it only if there are no children? (it would be easier to crawl & makes sense, cuz otherwise you may block useful background)
 
