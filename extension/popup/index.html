@@ -6,10 +6,37 @@
 </head>
 <body>
   <button id="turn-off">
-    Turn off Pixelate
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentcolor">
+<path d="M17.953 5.25C19.3241 6.45918 20.2944 8.0572 20.7348 9.83143C21.1753 11.6057 21.065 13.472 20.4187 15.182C19.7724 16.892 18.6206 18.3646 17.1167 19.4039C15.6128 20.4433 13.8281 20.9999 12 20.9999C10.1719 20.9999 8.38718 20.4433 6.88327 19.4039C5.37937 18.3646 4.22762 16.892 3.58129 15.182C2.93495 13.472 2.82469 11.6057 3.26516 9.83143C3.70563 8.0572 4.67595 6.45918 6.047 5.25M12 3V12" stroke="currentcolor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+    Turn Off Pixelate
   </button>
 
   <section>
+    <div>
+      <h2>Current website</h2>
+
+      <div id="website">
+        Loading...
+      </div>
+
+
+      <button id="block-page">
+        Block only this page
+      </button>
+
+      <button id="block-website">
+        Block entire website
+      </button>
+    </div>
+
+    <div id="link">
+      <a href="#">
+        Manage blocklist
+      </a>
+    </div>
+
   </section>
 
   <script src="popup.js"></script>
