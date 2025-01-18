@@ -1,0 +1,48 @@
+:root {
+  --primary-light: #8abdff;
+  --primary: #6d5dfc;
+  --primary-dark: #5b0eeb;
+  
+  --white: #FFFFFF;
+  --greyLight-1: #E4EBF5;
+  --greyLight-2: #c8d0e7;
+  --greyLight-3: #bec8e4;
+  --greyDark: #9baacf;
+}
+html {
+  width: 320px;
+  height: 480px;
+  background: var(--greyLight-1);
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 62.5%;
+}
+
+#turn-off {
+  border: none;
+  width: 14rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: var(--primary);
+  box-shadow:inset .2rem .2rem 1rem var(--primary-light), inset -.2rem -.2rem 1rem var(--primary-dark), .3rem .3rem .6rem var(--greyLight-2), -.2rem -.2rem .5rem var(--white);
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: .3s ease;
+  color: var(--greyLight-1);
+}
+#turn-off:hover {
+  color: var(--white);
+}
+#turn-off:active {
+  box-shadow:inset .2rem .2rem 1rem var(--primary-dark), inset -.2rem -.2rem 1rem var(--primary-light);
+}

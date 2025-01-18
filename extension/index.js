@@ -1,36 +1,64 @@
-const processImage = (image) => {
+let allImages = []
+let isHidden = true
+const toggleShown = () => {
+  console.log('toggling')
+  isHidden = isHidden ^ true
+  if (isHidden) {
+    for (const image of allImages) {
+      image.src = image.getAttribute('data-pixelated-src')
+    }
+  } else {
+    for (const image of allImages) {
+      image.src = image.getAttribute('data-og-src')
+    }
+  }
+}
+
+console.log('initializing')
+chrome.runtime.onMessage.addListener((mes) => {
+  console.log('message', mes)
+  if (mes.action == 'toggle') {
+    toggleShown()
+  }
+})
+
+const processImage = async (image) => {
   if (!image || !image.src || image.getAttribute('data-substituted')) {
     return
   }
-  return pixelate(image).then(res => {
-    if (res) {
-      image.setAttribute('data-og-src', image.src)
-      image.setAttribute('data-pixelated-src', res)
-      image.src = res
-      if (image.srcset) {
-        image.srcset = ''
-      }
-      image.setAttribute('data-substituted', true)
-      
+  const res = await pixelate(image)
 
-      /*
-      image.addEventListener('mouseenter', () => {
-        image.src = image.getAttribute('data-og-src')
-      })
-      image.addEventListener('mouseleave', () => {
-        image.src = image.getAttribute('data-pixelated-src')
-      })
-      */
+  if (res) {
+    image.setAttribute('data-og-src', image.src)
+    image.setAttribute('data-pixelated-src', res)
+    if (isHidden) {
+      image.src = res
     }
-  })
-}
-const tryPixelating = () => {
-  const images = document.querySelectorAll('img')
-  const promises = []
-  for (const image of images) {
-    promises.push(processImage(image))
+    if (image.srcset) {
+      image.srcset = ''
+    }
+    image.setAttribute('data-substituted', true)
+    return image
   }
-  Promise.all(promises)
+  return null
+}
+
+let isBusy = false
+const tryPixelating = async () => {
+  if (isBusy) {
+    return
+  }
+  isBusy = true
+  const images = [...document.querySelectorAll(
+    'img'
+  )]
+  const processedImages = await Promise.all(
+    images.map(processImage)
+  )
+  allImages = allImages.concat(
+    processedImages.filter(item => item != null)
+  )
+  isBusy = false
 }
 
 
@@ -45,6 +73,8 @@ document.addEventListener('mousemove', () => {
 })
 
 const attachScroll = () => {
+  if (location.host != 'web.telegram.org') return 
+
   const els = document.querySelectorAll(
     '.custom-scroll'
   )

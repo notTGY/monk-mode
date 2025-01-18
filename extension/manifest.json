@@ -23,6 +23,8 @@
     "default_popup": "popup/index.html"
   },
 
+  "permissions": [ "tabs" ],
+
   "content_scripts": [{
     "matches": ["https://*/**"],
     "js": ["pixelate.js", "index.js"],
