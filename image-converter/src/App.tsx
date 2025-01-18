@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { UploadCloud, Download } from 'lucide-react'
+import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useDropzone } from 'react-dropzone'
+import * as z from "zod"
 import {
   Dialog,
   DialogContent,
@@ -12,17 +14,14 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-
 import { Header } from '@/components/header'
 import { pixelate } from '@/lib/pixelate'
-import { useTranslation } from "react-i18next";
 
 export default function ImageUploader() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const formSchema = z.object({
     email: z.string().email(t('form.email-error')),
