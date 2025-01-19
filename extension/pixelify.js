@@ -76,7 +76,7 @@ const processLoadedImage = (image) => {
   return
 }
 
-const pixelate = (image) => new Promise(
+const pixelify = (image) => new Promise(
   (resolve, reject) => {
   const newImage = new Image()
   newImage.width = image.width

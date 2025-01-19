@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Pixelate",
+  "name": "Pixelify",
   "version": "0.0",
 
   "description": "Reduce distractions by bluring images on websites.",
@@ -19,7 +19,7 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "Pixelate",
+    "default_title": "Pixelify",
     "default_popup": "popup/index.html"
   },
 
@@ -27,7 +27,7 @@
 
   "content_scripts": [{
     "matches": ["https://*/**"],
-    "js": ["pixelate.js", "index.js"],
+    "js": ["pixelify.js", "index.js"],
     "css": ["styles.css"]
   }]
 }

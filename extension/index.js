@@ -1,8 +1,8 @@
 let allImages = []
-let isHidden = true
+let shouldPixelate = true
 const toggleShown = () => {
   console.log('toggling')
-  isHidden = isHidden ^ true
+  shouldPixelate = shouldPixelate ^ true
   if (isHidden) {
     for (const image of allImages) {
       image.src = image.getAttribute('data-pixelated-src')
@@ -24,14 +24,19 @@ chrome.runtime.onMessage.addListener((mes) => {
 
 const processImage = async (image) => {
   if (!image || !image.src || image.getAttribute('data-substituted')) {
-    return
+    return null
   }
-  const res = await pixelate(image)
+  try {
+  const res = await pixelify(image)
+  } catch(e) {
+    console.log(e)
+    return null
+  }
 
   if (res) {
     image.setAttribute('data-og-src', image.src)
     image.setAttribute('data-pixelated-src', res)
-    if (isHidden) {
+    if (shouldPixelate) {
       image.src = res
     }
     if (image.srcset) {
@@ -43,36 +48,28 @@ const processImage = async (image) => {
   return null
 }
 
-let isBusy = false
+let isBusyPixelating = false
 const tryPixelating = async () => {
-  if (isBusy) {
+  if (isBusyPixelating) {
     return
   }
-  isBusy = true
+  isBusyPixelating = true
   const images = [...document.querySelectorAll(
     'img'
   )]
   const processedImages = await Promise.all(
-    images.map(processImage)
+    images
+      .filter(image => !allImages.includes(image))
+      .map(processImage)
   )
   allImages = allImages.concat(
     processedImages.filter(item => item != null)
   )
-  isBusy = false
+  isBusyPixelating = false
 }
 
 
-document.addEventListener('scroll', () => {
-  tryPixelating()
-})
-
-
-document.addEventListener('mousemove', () => {
-  tryPixelating()
-  attachScroll()
-})
-
-const attachScroll = () => {
+const attachTelegramScroll = () => {
   if (location.host != 'web.telegram.org') return 
 
   const els = document.querySelectorAll(
@@ -88,15 +85,32 @@ const attachScroll = () => {
   }
 }
 
-document.body.onload = () => {
-  tryPixelating()
-  attachScroll()
-}
-document.addEventListener('click', () => {
-  tryPixelating()
-  attachScroll()
-})
 
-tryPixelating()
-attachScroll()
-//setInterval(addAttributes, 1000)
+const init = () => {
+  if (typeof window.__PixelateInited != 'undefined') {
+    return
+  }
+  window.__PixelateInited = true
+
+  document.addEventListener('scroll', () => {
+    tryPixelating()
+    attachTelegramScroll()
+  })
+
+  document.addEventListener('mousemove', () => {
+    tryPixelating()
+    attachTelegramScroll()
+  })
+
+  document.addEventListener('click', () => {
+    tryPixelating()
+    attachTelegramScroll()
+  })
+
+  tryPixelating()
+  attachTelegramScroll()
+  //setInterval(addAttributes, 1000)
+}
+
+document.body.onload = init
+init()
