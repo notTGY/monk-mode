@@ -105,7 +105,7 @@ export default function Main({
           onClick={togglePixelation}
           disabled={isLoading}
         >
-          <Power className="w-8 h-8" strokeWidth={3} /> Turn Off Pixelate
+          <Power className="w-8 h-8" strokeWidth={3} /> Turn Off Pixelify
         </Button>
       </div>
 
