@@ -20,7 +20,7 @@
       "128": "icons/icon128.png"
     },
     "default_title": "Pixelify",
-    "default_popup": "popup/index.html"
+    "default_popup": "popup-app/index.html"
   },
 
   "permissions": [ "tabs" ],

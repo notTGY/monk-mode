@@ -3,31 +3,22 @@ let shouldPixelate = true
 const toggleShown = () => {
   console.log('toggling')
   shouldPixelate = shouldPixelate ^ true
-  if (isHidden) {
-    for (const image of allImages) {
-      image.src = image.getAttribute('data-pixelated-src')
-    }
-  } else {
-    for (const image of allImages) {
-      image.src = image.getAttribute('data-og-src')
-    }
+  for (const image of allImages) {
+    image.src = image.getAttribute(
+      shouldPixelate
+        ? 'data-pixelated-src'
+        : 'data-og-src'
+    )
   }
 }
-
-console.log('initializing')
-chrome.runtime.onMessage.addListener((mes) => {
-  console.log('message', mes)
-  if (mes.action == 'toggle') {
-    toggleShown()
-  }
-})
 
 const processImage = async (image) => {
   if (!image || !image.src || image.getAttribute('data-substituted')) {
     return null
   }
+  let res
   try {
-  const res = await pixelify(image)
+    res = await pixelify(image)
   } catch(e) {
     console.log(e)
     return null
@@ -91,6 +82,14 @@ const init = () => {
     return
   }
   window.__PixelateInited = true
+
+  console.log('initializing')
+  chrome.runtime.onMessage.addListener((mes) => {
+    console.log('message', mes)
+    if (mes.action == 'toggle') {
+      toggleShown()
+    }
+  })
 
   document.addEventListener('scroll', () => {
     tryPixelating()
