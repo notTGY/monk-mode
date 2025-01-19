@@ -99,7 +99,7 @@ export default function Main({
   return (
     <div>
       {/* Header */}
-      <div className="mb-8 flex items-center gap-2">
+      <div className="px-6 mb-8 flex items-center gap-2">
         <Button 
           className="w-full text-xl rounded-full" 
           onClick={togglePixelation}
@@ -112,7 +112,7 @@ export default function Main({
       {/* Main Card */}
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Current website</CardTitle>
+          <CardTitle className="text-xl">Current website</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {isLoading ? (
