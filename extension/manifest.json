@@ -23,6 +23,11 @@
     "default_popup": "popup-app/index.html"
   },
 
+  "options_ui": {
+    "page": "options-app/index.html",
+    "open_in_tab": true
+  },
+
   "permissions": [ "tabs", "storage" ],
 
   "content_scripts": [{
