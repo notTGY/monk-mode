@@ -1,49 +1,6 @@
-import React from "react"
+import React from 'react'
 
-import { ModeToggle } from '@/components/mode-toggle'
-
-interface LayoutProps {
-  children: React.ReactNode
-}
-
-export function Layout({ children }: LayoutProps) {
-  return (
-    <div className="min-h-screen flex">
-      {/* Left sidebar */}
-      <div className="w-64 border-r bg-background">
-        <nav className="p-4 space-y-2">
-          <a
-            href="#"
-            className="text-xl block p-2 rounded-lg bg-accent text-accent-foreground"
-          >
-            Blocklist
-          </a>
-          <a
-            href="#"
-            className="text-xl block p-2 rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-          >
-            Schedule
-          </a>
-        </nav>
-      </div>
-      {/* Main content */}
-      <div className="flex-1">
-        <header className="h-16 border-b flex items-center justify-between px-6">
-          <div className="flex items-center">
-            <LogoIcon className="h-12 w-12" />
-            <h1 className="text-lg">Pixelify options</h1>
-          </div>
-          <ModeToggle/>
-        </header>
-
-        <main className="p-6">{children}</main>
-
-      </div>
-    </div>
-  )
-}
-
-const LogoIcon: React.FC<{className?: string}> = (props) => {
+export const LogoIcon: React.FC<{className?: string}> = (props) => {
   return (
     <svg
       {...props}
@@ -57,3 +14,4 @@ const LogoIcon: React.FC<{className?: string}> = (props) => {
     </svg>
   )
 }
+

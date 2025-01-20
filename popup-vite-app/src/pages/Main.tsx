@@ -19,6 +19,13 @@ import {
   useWebsiteBlocklist,
 } from '@/hooks/useWebsiteBlocklist'
 
+const openSettings = () => {
+  if (import.meta.env.DEV) {
+    console.log('opening options page')
+    return
+  }
+  chrome.runtime.openOptionsPage()
+}
 
 export default function Main() {
   const [
@@ -197,6 +204,10 @@ export default function Main() {
           <div className="pt-4 text-center">
             <a 
               href="#" 
+              onClick={(e) => {
+                e.preventDefault()
+                openSettings()
+              }}
               className="text-sm text-muted-foreground hover:text-primary underline underline-offset-4"
             >
               Manage blocklist
