@@ -1,9 +1,13 @@
+const DEBUG = false
+
 const storageArea = chrome.storage.local
 
 let allImages = []
 let shouldPixelate = false
 const toggleShown = async () => {
-  console.log('toggling')
+  if (DEBUG) {
+    console.log('toggling')
+  }
   shouldPixelate = shouldPixelate ^ true
 
   storageArea.set({shouldPixelate})
@@ -28,7 +32,7 @@ const processImage = async (image) => {
   try {
     res = await pixelify(image)
   } catch(e) {
-    console.log(e)
+    console.log('Pixelify error: ', e)
     return null
   }
 
@@ -56,13 +60,16 @@ const tryPixelating = async () => {
   const images = [...document.querySelectorAll(
     'img'
   )]
-  const processedImages = await Promise.all(
+  const processedImages = await Promise.allSettled(
     images
       .filter(image => !allImages.includes(image))
       .map(processImage)
   )
   allImages = allImages.concat(
-    processedImages.filter(item => item != null)
+    processedImages
+      .filter(item => item.status == 'fulfilled')
+      .map(item => item.value)
+      .filter(item => item != null)
   )
   isBusyPixelating = false
 }
@@ -120,19 +127,19 @@ const init = async () => {
   }
   window.__PixelateInited = true
 
-  console.log('initializing')
+  if (DEBUG) {
+    console.log('initializing')
+  }
 
   const currentHostname = location.hostname
   const currentUrl = location.href
 
-  const blocklistedHostnames = await storageArea.get(
-    'blocklisted-hostnames'
-  )
-  const blocklistedUrls = await storageArea.get(
-    'blocklisted-urls'
-  )
-
-  console.log(blocklistedHostnames, blocklistedUrls)
+  const blocklistedHostnames = (await storageArea.get(
+    'blocklistedHostnames'
+  )).blocklistedHostnames ?? {}
+  const blocklistedUrls = (await storageArea.get(
+    'blocklistedUrls'
+  )).blocklistedUrls ?? {}
 
   if (
     blocklistedHostnames[currentHostname]
@@ -143,7 +150,9 @@ const init = async () => {
 
   chrome.runtime.onMessage.addListener(
     async (mes, sender, sendResponse) => {
-      console.log('message', mes)
+      if (DEBUG) {
+        console.log('message', mes)
+      }
       switch (mes.action) {
         case 'toggle':
           await toggleShown()
@@ -152,7 +161,9 @@ const init = async () => {
           throw new Error('Unknown action: ' + mes.action)
       }
       sendResponse(true)
-      console.log('Responded')
+      if (DEBUG) {
+        console.log('Responded')
+      }
     },
   )
 

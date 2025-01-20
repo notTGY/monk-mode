@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Power, Earth, Info } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,133 +8,67 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { storage } from '@/lib/storage'
+
+import {
+  usePixelifyStatus,
+} from '@/hooks/usePixelifyStatus'
+import {
+  useCurrentWebsite,
+} from '@/hooks/useCurrentWebsite'
+import {
+  useWebsiteBlocklist,
+} from '@/hooks/useWebsiteBlocklist'
 
 
-export interface Website {
-  icon: string;
-  title: string;
-  url: string;
-}
-
-export interface WebsiteBlockerProps {
-  onBlockPage?: () => void;
-  onBlockWebsite?: () => void;
-}
-
-const mockWebsiteInfo: Website = {
-  icon: "",
-  title: "Saved Messages",
-  url: "https://web.telegram.org/a/#-1002499894779_3662fds;fjd;sjf;dsjfdskjfdsjf;dsjf;ldksjfdskfj;saj",
-}
-
-const fetchWebsiteInfo = async (): Promise<Website> => {
-  return new Promise((resolve, reject) => {
-    if (typeof chrome.tabs == 'undefined') {
-      if (import.meta.env.DEV) {
-        resolve(mockWebsiteInfo)
-        return
-      }
-      reject(new Error('Not running in chrome extension'))
-      return
-    }
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
-        return;
-      }
-
-      if (tabs.length > 0) {
-        const tab = tabs[0];
-        resolve({
-          icon: tab.favIconUrl || '', // The favicon URL of the page
-          title: tab.title || '',     // The title of the page
-          url: tab.url || '',         // The URL of the page
-        });
-      } else {
-        reject(new Error('No active tab found'));
-      }
-    });
-  });
-};
-
-
-const togglePixelation = async () => {
-  const message = { action: 'toggle' }
-
-  if (typeof chrome.tabs == 'undefined') {
-    if (import.meta.env.DEV) {
-      console.log('Sending to script', message)
-      return
-    }
-    throw new Error('Not running in chrome extension')
-    return
-  }
-  const tabs = await chrome.tabs.query({})
-
-  await Promise.allSettled(
-    tabs
-      .filter(t => t.id)
-      .map(tab => chrome.tabs.sendMessage(tab.id!, message))
-  )
-}
-
-const fetchPixelifyStatus = async (): Promise<boolean> => {
-  const obj: any = await storage.get('shouldPixelate')
-  const shouldPixelate = obj.shouldPixelate
-  return shouldPixelate
-}
-
-export default function Main({ 
-  onBlockPage,
-  onBlockWebsite 
-}: WebsiteBlockerProps) {
+export default function Main() {
   const [
-    isLoadingWebsite, setIsLoadingWebsite
-  ] = useState(true)
-  const [website, setWebsite] = useState<Website>()
+    isLoadingPixelifyStatus,
+    isPixelifyActive,
+    onToggle,
+  ] = usePixelifyStatus()
 
   const [
-    isLoadingPixelifyStatus, setIsLoadingPixelifyStatus,
-  ] = useState(true)
+    isLoadingWebsite, website,
+  ] = useCurrentWebsite()
+
   const [
-    isPixelifyActive, setIsPixelifyActive,
-  ] = useState(false)
+    isLoadingBlocklist,
+    isUrlBlocked,
+    isHostnameBlocked,
+    urlAction,
+    hostnameAction,
+  ] = useWebsiteBlocklist(isLoadingWebsite, website)
+
   
-  useEffect(() => {
-    const loadWebsiteInfo = async () => {
-      const data = await fetchWebsiteInfo()
-      setWebsite(data)
-      setIsLoadingWebsite(false)
-    }
-    const loadPixelifyStatus = async () => {
-      const data = await fetchPixelifyStatus()
-      setIsPixelifyActive(data)
-      setIsLoadingPixelifyStatus(false)
-    }
-    loadWebsiteInfo()
-    loadPixelifyStatus()
-  }, [])
-
-  const onToggle = () => {
-    setIsLoadingPixelifyStatus(true)
-    togglePixelation().then(async () => {
-      const data = await fetchPixelifyStatus()
-      setIsPixelifyActive(data)
-      setIsLoadingPixelifyStatus(false)
-    })
-  }
-
   const toggleText = isPixelifyActive ? (
     'Turn Off Pixelify'
   ) : (
     'Turn On Pixelify'
   )
 
+  const toggleDescription = (isUrlBlocked || isHostnameBlocked) ? (
+    'once you open new window, images will be hidden again'
+  ) : (
+    'once you open new window, images will be shown again'
+  )
+
+  const urlActionText = isUrlBlocked ? (
+    'Unblock this page'
+  ) : (
+    'Block only this page'
+  )
+
+  const hostnameActionText = isHostnameBlocked ? (
+    'Unblock entire website'
+  ) : (
+    'Block entire website'
+  )
+
+
   return (
     <div className="bg-background min-h-screen w-full h-full p-4 flex flex-col items-center pt-8">
       {/* Header */}
-      <div className="px-6 mb-8 flex items-center gap-2">
+      <div className="px-6 mb-2 flex items-center gap-2">
         <Button 
           className="w-full text-xl rounded-full" 
           onClick={onToggle}
@@ -145,6 +78,9 @@ export default function Main({
           <Power className="w-8 h-8" strokeWidth={3} /> {toggleText}
         </Button>
       </div>
+      <p className="text-center mb-8 text-xs">
+        {toggleDescription}
+      </p>
 
       {/* Main Card */}
       <Card className="w-full max-w-md">
@@ -212,12 +148,12 @@ export default function Main({
               <Button 
                 className="w-full" 
                 variant="outline"
-                onClick={onBlockPage}
-                disabled={isLoadingWebsite}
+                onClick={urlAction}
+                disabled={isLoadingBlocklist}
               >
-                Block only this page
+                {urlActionText}
               </Button>
-              {isLoadingWebsite ? (
+              {isLoadingBlocklist ? (
                 <Info/>
               ) : (
                 <TooltipProvider>
@@ -236,12 +172,12 @@ export default function Main({
               <Button 
                 className="w-full" 
                 variant="outline"
-                onClick={onBlockWebsite}
-                disabled={isLoadingWebsite}
+                onClick={hostnameAction}
+                disabled={isLoadingBlocklist}
               >
-                Block entire website
+                {hostnameActionText}
               </Button>
-              {isLoadingWebsite ? (
+              {isLoadingBlocklist ? (
                 <Info/>
               ) : (
                 <TooltipProvider>

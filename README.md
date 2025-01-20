@@ -5,7 +5,7 @@ Disable distractions on the web. This document is also sprint planner/backlog.
 
 
 ### blocklist feature
-TODO: add/remove website to blocklist through popup/context menu/settings page
+TODO: add/remove website to blocklist through settings page
 
 ### customization feature
 TODO: hardcode implementation

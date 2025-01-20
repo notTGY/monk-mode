@@ -3,14 +3,13 @@ export let storage: any
 if (import.meta.env.DEV) {
   const local_key = 'chrome'
   storage = {
-    get(key: string) {
+    get(_: string) {
       return new Promise((res, _) => {
         let val: any = {}
         const v = localStorage.getItem(local_key)
         if (v != null) {
           try {
             val = JSON.parse(v)
-            val = val[key]
           } catch(e) { }
         }
         res(val)
