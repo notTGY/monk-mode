@@ -1,7 +1,7 @@
-img:not([data-substituted]) {
+:root[data-pixelify-inited] img:not([data-substituted]) {
   display: none!important;
 }
-img[data-substituted] {
+:root[data-pixelify-inited] img[data-substituted] {
   display: unset;
   image-rendering: pixelated;
 }

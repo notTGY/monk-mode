@@ -3,10 +3,8 @@ Disable distractions on the web. This document is also sprint planner/backlog.
 
 ## Backlog
 
-all tasks and features are arranged in order of implementation.
 
 ### blocklist feature
-TODO: hardcode implementation
 TODO: add/remove website to blocklist through popup/context menu/settings page
 
 ### customization feature
@@ -15,9 +13,6 @@ TODO: change filters
 
 ### points feature
 ### schedule feature
-
-### cheat feature
-TODO: Add shortcut, so that it is easy to cheat. For example, hover with Shift+Ctrl key on.
 
 ## low priority
 

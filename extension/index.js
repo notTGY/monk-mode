@@ -1,14 +1,22 @@
+const storageArea = chrome.storage.local
+
 let allImages = []
-let shouldPixelate = true
-const toggleShown = () => {
+let shouldPixelate = false
+const toggleShown = async () => {
   console.log('toggling')
   shouldPixelate = shouldPixelate ^ true
+
+  storageArea.set({shouldPixelate})
+
   for (const image of allImages) {
     image.src = image.getAttribute(
       shouldPixelate
         ? 'data-pixelated-src'
         : 'data-og-src'
     )
+  }
+  if (shouldPixelate) {
+    await setupListeners()
   }
 }
 
@@ -67,29 +75,24 @@ const attachTelegramScroll = () => {
     '.custom-scroll'
   )
   for (const el of els) {
-    if (el.getAttribute('data-pixelate-mounted')) {
+    if (el.getAttribute('data-pixelify-mounted')) {
       continue
     }
-    el.setAttribute('data-pixelate-mounted', true)
+    el.setAttribute('data-pixelify-mounted', true)
 
     el.addEventListener('scroll', tryPixelating)
   }
 }
 
-
-const init = () => {
-  if (typeof window.__PixelateInited != 'undefined') {
+let __setupInited = false
+const setupListeners = async () => {
+  if (__setupInited) {
     return
   }
-  window.__PixelateInited = true
-
-  console.log('initializing')
-  chrome.runtime.onMessage.addListener((mes) => {
-    console.log('message', mes)
-    if (mes.action == 'toggle') {
-      toggleShown()
-    }
-  })
+  __setupInited = true
+  document.documentElement.setAttribute(
+    'data-pixelify-inited', true
+  )
 
   document.addEventListener('scroll', () => {
     tryPixelating()
@@ -106,9 +109,58 @@ const init = () => {
     attachTelegramScroll()
   })
 
-  tryPixelating()
+  await tryPixelating()
   attachTelegramScroll()
   //setInterval(addAttributes, 1000)
+}
+
+const init = async () => {
+  if (typeof window.__PixelateInited != 'undefined') {
+    return
+  }
+  window.__PixelateInited = true
+
+  console.log('initializing')
+
+  const currentHostname = location.hostname
+  const currentUrl = location.href
+
+  const blocklistedHostnames = await storageArea.get(
+    'blocklisted-hostnames'
+  )
+  const blocklistedUrls = await storageArea.get(
+    'blocklisted-urls'
+  )
+
+  console.log(blocklistedHostnames, blocklistedUrls)
+
+  if (
+    blocklistedHostnames[currentHostname]
+    || blocklistedUrls[currentUrl]
+  ) {
+    shouldPixelate = true
+  }
+
+  chrome.runtime.onMessage.addListener(
+    async (mes, sender, sendResponse) => {
+      console.log('message', mes)
+      switch (mes.action) {
+        case 'toggle':
+          await toggleShown()
+          break
+        default:
+          throw new Error('Unknown action: ' + mes.action)
+      }
+      sendResponse(true)
+      console.log('Responded')
+    },
+  )
+
+  storageArea.set({shouldPixelate})
+
+  if (shouldPixelate) {
+    setupListeners()
+  }
 }
 
 document.body.onload = init

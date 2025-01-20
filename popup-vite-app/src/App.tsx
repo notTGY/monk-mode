@@ -9,7 +9,6 @@ import {
 import 'keen-slider/keen-slider.min.css'
 import { useKeenSlider } from 'keen-slider/react'
 
-
 export default function App() {
   const initialPage = 0
   const [page, setPage] = useState(initialPage)

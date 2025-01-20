@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { storage } from '@/lib/storage'
 
 
 export interface Website {
@@ -72,29 +73,64 @@ const togglePixelation = async () => {
   }
   const tabs = await chrome.tabs.query({})
 
-  for (const tab of tabs) {
-    if (!tab.id) {
-      continue
-    }
-    chrome.tabs.sendMessage(tab.id, message)
-  }
+  await Promise.allSettled(
+    tabs
+      .filter(t => t.id)
+      .map(tab => chrome.tabs.sendMessage(tab.id!, message))
+  )
+}
+
+const fetchPixelifyStatus = async (): Promise<boolean> => {
+  const obj: any = await storage.get('shouldPixelate')
+  const shouldPixelate = obj.shouldPixelate
+  return shouldPixelate
 }
 
 export default function Main({ 
   onBlockPage,
   onBlockWebsite 
 }: WebsiteBlockerProps) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [
+    isLoadingWebsite, setIsLoadingWebsite
+  ] = useState(true)
   const [website, setWebsite] = useState<Website>()
+
+  const [
+    isLoadingPixelifyStatus, setIsLoadingPixelifyStatus,
+  ] = useState(true)
+  const [
+    isPixelifyActive, setIsPixelifyActive,
+  ] = useState(false)
   
   useEffect(() => {
     const loadWebsiteInfo = async () => {
       const data = await fetchWebsiteInfo()
       setWebsite(data)
-      setIsLoading(false)
+      setIsLoadingWebsite(false)
+    }
+    const loadPixelifyStatus = async () => {
+      const data = await fetchPixelifyStatus()
+      setIsPixelifyActive(data)
+      setIsLoadingPixelifyStatus(false)
     }
     loadWebsiteInfo()
+    loadPixelifyStatus()
   }, [])
+
+  const onToggle = () => {
+    setIsLoadingPixelifyStatus(true)
+    togglePixelation().then(async () => {
+      const data = await fetchPixelifyStatus()
+      setIsPixelifyActive(data)
+      setIsLoadingPixelifyStatus(false)
+    })
+  }
+
+  const toggleText = isPixelifyActive ? (
+    'Turn Off Pixelify'
+  ) : (
+    'Turn On Pixelify'
+  )
 
   return (
     <div className="bg-background min-h-screen w-full h-full p-4 flex flex-col items-center pt-8">
@@ -102,10 +138,11 @@ export default function Main({
       <div className="px-6 mb-8 flex items-center gap-2">
         <Button 
           className="w-full text-xl rounded-full" 
-          onClick={togglePixelation}
-          disabled={isLoading}
+          onClick={onToggle}
+          disabled={isLoadingPixelifyStatus}
+          variant={isPixelifyActive ? 'default' : 'outline'}
         >
-          <Power className="w-8 h-8" strokeWidth={3} /> Turn Off Pixelify
+          <Power className="w-8 h-8" strokeWidth={3} /> {toggleText}
         </Button>
       </div>
 
@@ -115,7 +152,7 @@ export default function Main({
           <CardTitle className="text-xl">Current website</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {isLoading ? (
+          {isLoadingWebsite ? (
             // Loading State
             <div className="space-y-4">
               <div className="flex items-center gap-3">
@@ -176,11 +213,11 @@ export default function Main({
                 className="w-full" 
                 variant="outline"
                 onClick={onBlockPage}
-                disabled={isLoading}
+                disabled={isLoadingWebsite}
               >
                 Block only this page
               </Button>
-              {isLoading ? (
+              {isLoadingWebsite ? (
                 <Info/>
               ) : (
                 <TooltipProvider>
@@ -200,11 +237,11 @@ export default function Main({
                 className="w-full" 
                 variant="outline"
                 onClick={onBlockWebsite}
-                disabled={isLoading}
+                disabled={isLoadingWebsite}
               >
                 Block entire website
               </Button>
-              {isLoading ? (
+              {isLoadingWebsite ? (
                 <Info/>
               ) : (
                 <TooltipProvider>
