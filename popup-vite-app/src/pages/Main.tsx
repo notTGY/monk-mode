@@ -114,7 +114,7 @@ export default function Main() {
                   <img 
                     src={website.icon} 
                     alt={`${website.title} icon`}
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10"
                   />
                 ) : (
                   <Earth className="w-10 h-10" />
