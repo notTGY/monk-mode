@@ -26,14 +26,18 @@ export default function Blocklist() {
     setUrls([])
     setIsUrlsLoading(true)
     getCurrentBlocklistedUrls().then(res => {
-      setUrls(Object.keys(res))
+      const urls = Object.keys(res)
+      urls.sort()
+      setUrls(urls)
       setIsUrlsLoading(false)
     })
 
     setHostnames([])
     setIsHostnamesLoading(true)
     getCurrentBlocklistedHostnames().then(res => {
-      setHostnames(Object.keys(res))
+      const hostnames = Object.keys(res)
+      hostnames.sort()
+      setHostnames(hostnames)
       setIsHostnamesLoading(false)
     })
   }, [])
@@ -41,7 +45,9 @@ export default function Blocklist() {
   const handleAddUrl = (e: React.FormEvent) => {
     e.preventDefault()
     if (newUrl && !urls.includes(newUrl)) {
-      setUrls([...urls, newUrl])
+      const newUrls = [...urls, newUrl]
+      newUrls.sort()
+      setUrls(newUrls)
       setIsUrlsLoading(true)
       block({ url: newUrl }).then(() => {
         setIsUrlsLoading(false)
@@ -53,7 +59,9 @@ export default function Blocklist() {
   const handleAddHostname = (e: React.FormEvent) => {
     e.preventDefault()
     if (newHostname && !hostnames.includes(newHostname)) {
-      setHostnames([...hostnames, newHostname])
+      const newHostnames = [...hostnames, newHostname]
+      newHostnames.sort()
+      setHostnames(newHostnames)
       setIsHostnamesLoading(true)
       block({ hostname: newHostname }).then(() => {
         setIsHostnamesLoading(false)
