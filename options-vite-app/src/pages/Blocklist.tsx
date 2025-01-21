@@ -73,17 +73,20 @@ export default function Blocklist() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-3xl space-y-6">
       <h1 className="text-3xl font-bold">Blocklist</h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>Blocklisted websites</CardTitle>
+          <CardTitle className="text-lg">Blocklisted websites</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
-            {isUrlsLoading && urls.length === 0 ? (
-              <Skeleton className="h-4 w-[200px]" />
+            {urls.length === 0 ?
+              isUrlsLoading ? (
+                <Skeleton className="h-4 w-[200px]" />
+              ) : (
+                <p className="text-sm">You have no blocklisted websites</p>
             ) : urls.map((url) => (
               <BlocklistItem
                 key={url}
@@ -113,19 +116,22 @@ export default function Blocklist() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Blocklisted domains</CardTitle>
+          <CardTitle className="text-lg">Blocklisted domains</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
-            {isHostnamesLoading && hostnames.length === 0 ? (
-              <Skeleton className="h-4 w-[160px]" />
-            ) : hostnames.map((hostname) => (
-              <BlocklistItem
-                key={hostname}
-                value={hostname}
-                onRemove={removeHostname}
-              />
-            ))}
+            {hostnames.length === 0 ?
+              isHostnamesLoading ? (
+                <Skeleton className="h-4 w-[160px]" />
+              ) : (
+                <p className="text-sm">You have no blocklisted domains</p>
+              ) : hostnames.map((hostname) => (
+                <BlocklistItem
+                  key={hostname}
+                  value={hostname}
+                  onRemove={removeHostname}
+                />
+              ))}
           </div>
           <form
             onSubmit={handleAddHostname}

@@ -54,9 +54,9 @@ export default function Main() {
   )
 
   const toggleDescription = (isUrlBlocked || isHostnameBlocked) ? (
-    'once you open new window, images will be hidden again'
+    'When you open new window, images will be hidden again'
   ) : (
-    'once you open new window, images will be shown again'
+    'When you open new window, images will be shown again'
   )
 
   const urlActionText = isUrlBlocked ? (
@@ -85,7 +85,7 @@ export default function Main() {
           <Power className="w-8 h-8" strokeWidth={3} /> {toggleText}
         </Button>
       </div>
-      <p className="text-center mb-8 text-xs">
+      <p className="text-center mb-8 text-xs max-w-48">
         {toggleDescription}
       </p>
 
@@ -108,7 +108,7 @@ export default function Main() {
             </div>
           ) : website ? (
             // Loaded State
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 overflow-hidden">
               {
                 website.icon ? (
                   <img 
@@ -117,14 +117,14 @@ export default function Main() {
                     className="w-10 h-10"
                   />
                 ) : (
-                  <Earth className="w-10 h-10" />
+                  <Earth className="w-10 h-10 shrink-0" />
                 )
               }
-              <div className="space-y-1">
+              <div className="space-y-1 max-w-48">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <h3 className="line-clamp-1 max-w-52 font-medium overflow-hidden text-ellipsis">
+                      <h3 className="text-nowrap overflow-hidden text-ellipsis text-lg font-medium">
                         {website.title}
                       </h3>
                     </TooltipTrigger>
@@ -136,7 +136,7 @@ export default function Main() {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <p className="line-clamp-1 max-w-52 overflow-hidden text-ellipsis text-sm text-muted-foreground">
+                      <p className="text-nowrap overflow-hidden text-ellipsis text-sm text-muted-foreground">
                         {website.url}
                       </p>
                     </TooltipTrigger>

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { storage } from '@/lib/storage'
 
 type Theme = "dark" | "light" | "system"
 
@@ -18,6 +19,12 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 }
 
+const fetchTheme = async (): Promise<Theme> => {
+  const obj: any = await storage.get('theme')
+  const theme = obj.theme as Theme
+  return theme
+}
+
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({
@@ -29,6 +36,14 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
+
+  useEffect(() => {
+    fetchTheme().then(theme => {
+      if (theme) {
+        setTheme(theme)
+      }
+    })
+  }, [])
 
   useEffect(() => {
     const root = window.document.documentElement

@@ -33,6 +33,23 @@ export default function App() {
     }
   }
 
+  const bottomNav = (
+    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-4">
+      <div className="max-w-md mx-auto flex justify-between items-center">
+      {pages.map((pageId, i) => (
+        <Button
+          key={pageId}
+          variant={page == i ? "secondary" : "ghost"}
+          onClick={() => navigate(pageId)}
+          size="sm"
+        >
+          {page_to_title[pageId]}
+        </Button>
+      ))}
+      </div>
+    </div>
+  )
+
   return (
     <div className="bg-background">
       <div
@@ -45,21 +62,7 @@ export default function App() {
           </div>
         ))}
       </div>
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-4">
-        <div className="max-w-md mx-auto flex justify-between items-center">
-        {pages.map((pageId, i) => (
-          <Button
-            key={pageId}
-            variant={page == i ? "secondary" : "ghost"}
-            onClick={() => navigate(pageId)}
-            size="sm"
-          >
-            {page_to_title[pageId]}
-          </Button>
-        ))}
-        </div>
-      </div>
+      {pages.length > 1 ? bottomNav : null}
     </div>
   )
 }

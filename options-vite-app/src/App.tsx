@@ -7,6 +7,8 @@ import {
   pages, page_to_component, page_to_title,
 } from '@/pages'
 
+const VERSION = "Alpha 1/21/2025"
+
 export default function App() {
   const initialPage = 0
   const [page, setPage] = useState(initialPage)
@@ -18,41 +20,44 @@ export default function App() {
   )
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col">
       {/* Left sidebar */}
-      <div className="w-64 border-r bg-background">
-        <nav className="p-4 space-y-2">
-          {pages.map((pageId) => (
-            <a
-              href="#"
-              className={clsx(
-                "text-lg block p-2 rounded-lg", {
-                "bg-accent text-accent-foreground": pages[page] == pageId,
-                "text-muted-foreground hover:bg-accent hover:text-accent-foreground": pages[page] != pageId,
-              })}
-              key={pageId}
-              onClick={(e) => {
-                e.preventDefault()
-                setPage(pages.indexOf(pageId))
-              }}
-            >
-              {page_to_title[pageId]}
-            </a>
-          ))}
-        </nav>
-      </div>
+      <header className="h-16 border-b flex items-center justify-between px-6">
+        <div className="flex items-center">
+          <LogoIcon className="h-12 w-12" />
+          <h1 className="text-lg">Pixelify options</h1>
+        </div>
+        <ModeToggle/>
+      </header>
       {/* Main content */}
-      <div className="flex-1">
-        <header className="h-16 border-b flex items-center justify-between px-6">
-          <div className="flex items-center">
-            <LogoIcon className="h-12 w-12" />
-            <h1 className="text-lg">Pixelify options</h1>
-          </div>
-          <ModeToggle/>
-        </header>
+      <div className="flex-1 flex">
+        <div className="w-64 flex flex-col justify-between">
+          <nav className="p-4 space-y-2">
+            {pages.map((pageId) => (
+              <a
+                href="#"
+                className={clsx(
+                  "text-lg block p-2 rounded-lg", {
+                  "bg-accent text-accent-foreground": pages[page] == pageId,
+                  "text-muted-foreground hover:bg-accent hover:text-accent-foreground": pages[page] != pageId,
+                })}
+                key={pageId}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setPage(pages.indexOf(pageId))
+                }}
+              >
+                {page_to_title[pageId]}
+              </a>
+            ))}
+          </nav>
 
-        <main className="p-6">{children}</main>
+          <footer className="text-xs p-6">
+            {VERSION}
+          </footer>
+        </div>
 
+        <main className="flex-1 p-8">{children}</main>
       </div>
     </div>
   )

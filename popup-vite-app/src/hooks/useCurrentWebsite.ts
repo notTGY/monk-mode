@@ -8,8 +8,8 @@ export interface Website {
 
 const mockWebsiteInfo: Website = {
   icon: "",
-  title: "Saved Messages",
-  url: "https://web.telegram.org/a/#-1002499894779_3662fds;fjd;sjf;dsjfdskjfdsjf;dsjf;ldksjfdskfj;saj",
+  title: "Вы кто такие? Мы вас не знаем… - Gmail",
+  url: "chrome://extensions/?errors=dahpciklgjejlidilfhgonackmmodkao",
 }
 
 const fetchWebsiteInfo = async (): Promise<Website> => {
