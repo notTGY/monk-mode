@@ -1,0 +1,189 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { CtaButton } from "@/components/add-to-chrome-button"
+import { Chrome } from "lucide-react"
+
+import { Power, Check } from "lucide-react"
+
+import { HoverScrenshot } from '@/components/hover-screenshot'
+
+import { Image } from 'astro:assets'
+
+import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
+import GmailScreenshot from '@/assets/gmail-screenshot.png'
+import SearchScreenshot from '@/assets/search-screenshot.png'
+import SocialMediaScreenshot from '@/assets/social-media-screenshot.png'
+import OptionsPageScreenshot from '@/assets/options-page.png'
+import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
+
+---
+
+<Layout>
+
+<section
+  class="bg-purple rounded py-8 flex flex-col items-center"
+>
+
+  <div
+    class="max-w-3xl w-full grid grid-cols-1 sm:grid-cols-2 items-center justify-items-center gap-4"
+  >
+
+    <div class="flex justify-center flex-col items-center gap-8">
+
+    <h2 class="text-4xl font-semibold text-center max-w-sm">
+      <span class="opacity-80">
+        Cut Distractions by
+      </span>
+      <strong class="font-extrabold">Eliminating</strong>
+      <span class="opacity-80">
+        Triggers
+      </span>
+    </h2>
+
+
+    <CtaButton/>
+
+    <Button
+      className="px-8 py-6 text-xl rounded-full"
+      variant="outline"
+    >
+      <Power
+        className="w-12 h-12"
+        strokeWidth={3}
+      />
+      Turn On Pixelify
+    </Button>
+
+    </div>
+
+      <Image
+        src={MonaLisaPixelated}
+        alt={"Pixelated Mona Lisa"}
+        width={330 * 2}
+        height={493 * 2}
+        class="rounded shadow-lg w-full max-w-64"
+        format="webp"
+      />
+
+  </div>
+
+</section>
+
+
+<section class="px-4 py-8">
+  <Card className="w-full max-w-md mx-auto">
+    <CardHeader>
+      <h3 class="text-2xl">
+        Get Stuff Done
+      </h3>
+      <p>
+        The purpose is to
+        <strong class="text-purple-foreground">Increase&nbsp;your&nbsp;Productivity</strong>.
+      </p>
+    </CardHeader>
+    <CardContent className="">
+
+
+    <ol class="text-lg gap-2 flex flex-col">
+      <li class="flex justify-between">
+        <div class="flex items-center gap-1">
+          <Check className="w-4 pt-1" strokeWidth="3"/>
+          Respond to Emails
+        </div>
+<HoverScrenshot client:load>
+  <Image
+    src={GmailScreenshot}
+    alt={"Gmail app screenshot"}
+    width={1662}
+    height={1040}
+    class="rounded shadow-lg sm:w-96 w-64"
+    format="webp"
+  />
+</HoverScrenshot>
+      </li>
+      <li class="flex justify-between">
+        <div class="flex items-center gap-1">
+          <Check className="w-4 pt-1" strokeWidth="3"/>
+          Browse the web
+        </div>
+<HoverScrenshot client:load>
+  <Image
+    src={SearchScreenshot}
+    alt={"Search app screenshot"}
+    width={1405}
+    height={1040}
+    class="rounded shadow-lg sm:w-96 w-64"
+    format="webp"
+  />
+</HoverScrenshot>
+      </li>
+      <li class="flex justify-between">
+        <div class="flex items-center gap-1">
+          <Check className="w-4 pt-1" strokeWidth="3"/>
+          Engage on Social Media
+        </div>
+<HoverScrenshot client:load>
+  <Image
+    src={SocialMediaScreenshot}
+    alt={"Social Media app screenshot"}
+    width={1754}
+    height={1040}
+    class="rounded shadow-lg sm:w-96 w-64"
+    format="webp"
+  />
+</HoverScrenshot>
+      </li>
+    </ol>
+
+
+    </CardContent>
+  </Card>
+</section>
+
+
+<section class="p-4 py-8 flex flex-col items-center">
+  <div class="max-w-3xl w-full sm:px-8">
+    <h2 class="text-2xl font-bold py-2 max-w-prose">
+      Effortlessly manage your Blocklist
+    </h2>
+    <p class="text-md pb-6 max-w-prose">
+      Set Light or Dark theme, if you will.
+      Block websites you find addictive and&nbsp;strive!
+    </p>
+    <Image
+      src={OptionsPageScreenshot}
+      alt={"Options page screenshot"}
+      width={822*2}
+      height={493*2}
+      class="shadow-lg"
+      format="webp"
+    />
+  </div>
+</section>
+
+<section class="p-4 py-8 flex flex-col items-center">
+  <div class="max-w-3xl w-full sm:px-8 flex flex-col items-end">
+    <h2 class="text-2xl font-bold py-2 max-w-prose">
+      Pixelify is all about
+      <strong>Speed and Efficiency</strong>.
+    </h2>
+    <p class="text-md pb-6 max-w-prose">
+      Add website to Blocklist with just 2 clicks,
+      after that images will be pixelated automatically.
+      Temporarily disable pixelation on active website in 2 clicks!
+    </p>
+    <Image
+      src={TwoClickScreenshot}
+      alt={"Interaction screenshot"}
+      width={1165*2}
+      height={632*2}
+      class="rounded-lg shadow-lg"
+      format="webp"
+    />
+  </div>
+</section>
+
+</Layout>

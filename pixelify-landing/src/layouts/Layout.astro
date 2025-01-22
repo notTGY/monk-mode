@@ -1,0 +1,65 @@
+---
+import '@/styles/globals.css'
+import { Header } from '@/components/header'
+import Footer from '@/components/footer.astro'
+---
+<!doctype html>
+<html lang="en">
+	<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Pixelify" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- HTML Meta Tags -->
+<title>Pixelify</title>
+<meta name="description" content="Block distractive images on websites to focus and get more work done.">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://pixelifyapp.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pixelify">
+<meta property="og:description" content="Block distractive images on websites to focus and get more work done.">
+<meta property="og:image" content="/og_image.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="pixelifyapp.com">
+<meta property="twitter:url" content="https://pixelifyapp.com">
+<meta name="twitter:title" content="Pixelify">
+<meta name="twitter:description" content="Block distractive images on websites to focus and get more work done.">
+<meta name="twitter:image" content="/og_image.png">
+
+<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+	</head>
+	<body>
+
+<script is:inline>
+	const getThemePreference = () => {
+		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+			return localStorage.getItem('theme');
+		}
+		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+	};
+	const isDark = getThemePreference() === 'dark';
+	document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+
+	if (typeof localStorage !== 'undefined') {
+		const observer = new MutationObserver(() => {
+			const isDark = document.documentElement.classList.contains('dark');
+			localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		});
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+	}
+</script>
+
+    <Header client:load/>
+		<slot />
+    <Footer/>
+	</body>
+</html>
