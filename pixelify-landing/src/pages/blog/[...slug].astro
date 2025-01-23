@@ -1,0 +1,56 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import { getImage, Image } from 'astro:assets'
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await render(post);
+
+const image = await getImage({
+  src: post.data.heroImage,
+})
+---
+
+<Layout
+  image={image.src}
+  title={`Pixelify | ${post.data.title}`}
+  description={post.data.description}
+>
+  <main class="p-1 flex flex-col items-center">
+    <article class="max-w-3xl w-full prose dark:prose-invert">
+      <a href="/blog">
+        Back to list of posts
+      </a>
+
+      <Image
+        width={1200}
+        height={675}
+        src={post.data.heroImage}
+        class="rounded pt-4"
+        alt=""
+        format="webp"
+      />
+      <h3 class="text-lg font-semibold p-1">{post.data.title}</h3>
+      <time class="text-muted-foreground p-1" datetime={post.data.pubDate.toISOString()}>
+        {
+          post.data.pubDate.toLocaleDateString('en-us', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
+        }
+      </time>
+      <Content />
+    </article>
+  </main>
+</Layout>

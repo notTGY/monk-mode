@@ -45,9 +45,11 @@ export function NavigationMenuMore() {
                   </a>
                 </NavigationMenuLink>
               </li>
+              {/*
               <ListItem href="/help" title="Help">
                 Learn how to use Pixelify to its fullest effect.
               </ListItem>
+              */}
               <ListItem href="/blog" title="Blog">
                 Get insights into future of Pixelify.
               </ListItem>
