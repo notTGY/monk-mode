@@ -2,6 +2,20 @@
 import '@/styles/globals.css'
 import { Header } from '@/components/header'
 import Footer from '@/components/footer.astro'
+
+
+interface Props {
+  image?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  image = '/og_image.png',
+  title = 'Pixelify',
+  description = 'Block distractive images on websites to focus and get more work done.',
+} = Astro.props
+
 ---
 <!doctype html>
 <html lang="en">
@@ -17,23 +31,23 @@ import Footer from '@/components/footer.astro'
 <link rel="manifest" href="/site.webmanifest" />
 
 <!-- HTML Meta Tags -->
-<title>Pixelify</title>
-<meta name="description" content="Block distractive images on websites to focus and get more work done.">
+<title>{title}</title>
+<meta name="description" content={description}>
 
 <!-- Facebook Meta Tags -->
 <meta property="og:url" content="https://pixelifyapp.com">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Pixelify">
-<meta property="og:description" content="Block distractive images on websites to focus and get more work done.">
-<meta property="og:image" content="/og_image.png">
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:image" content={image}>
 
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
 <meta property="twitter:domain" content="pixelifyapp.com">
 <meta property="twitter:url" content="https://pixelifyapp.com">
-<meta name="twitter:title" content="Pixelify">
-<meta name="twitter:description" content="Block distractive images on websites to focus and get more work done.">
-<meta name="twitter:image" content="/og_image.png">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={image}>
 
 <!-- Meta Tags Generated via https://www.opengraph.xyz -->
 	</head>

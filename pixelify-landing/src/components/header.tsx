@@ -7,16 +7,73 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+import {
+  ListItem,
+} from '@/components/ui/navigation-list-item'
 
+export function NavigationMenuMore() {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>More</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid gap-3 p-6 w-[13.5rem] md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <li className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <a
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
+                    href="/"
+                  >
+                    <LogoIcon className="h-12 w-12" />
+                    <div className="mb-2 mt-4 text-lg font-medium">
+                      Pixelify
+                    </div>
+                    <p className="text-sm leading-tight text-muted-foreground">
+                      Block distractive images on websites to focus and get more work done.
+                    </p>
+                  </a>
+                </NavigationMenuLink>
+              </li>
+              <ListItem href="/help" title="Help">
+                Learn how to use Pixelify to its fullest effect.
+              </ListItem>
+              <ListItem href="/blog" title="Blog">
+                Get insights into future of Pixelify.
+              </ListItem>
+              <ListItem href="/changelog" title="Changelog">
+                Explore latest changes and stay on top of updates.
+              </ListItem>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
+}
 
 
 export function Header() {
   return (
-    <div className="container mx-auto px-4 md:px-6 lg:px-8 border-b-4 flex justify-center">
-      <header className="max-w-3xl flex h-20 w-full shrink-0 items-center px-4 md:px-6">
-        <LogoIcon className="h-12 w-12" />
-        <span className="text-xl">Pixelify</span>
-        <div className="ml-auto flex gap-2">
+    <div className="container mx-auto md:px-6 lg:px-8 border-b-4 flex justify-center">
+      <header className="max-w-3xl flex h-20 w-full shrink-0 items-center px-2 md:px-6">
+        <a href="/" className="flex items-center">
+          <LogoIcon className="h-12 w-12" />
+          <span className="text-xl">Pixelify</span>
+        </a>
+          <NavigationMenuMore />
+        <div className="ml-auto flex gap-4 items-center">
+
           <ModeToggle/>
         </div>
       </header>

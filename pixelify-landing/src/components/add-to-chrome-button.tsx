@@ -7,7 +7,7 @@ export function CtaButton() {
       href="https://chrome.google.com/webstore/detail/pixelify/kahgplgodldegnapinchdllbpobjmced"
       target="_blank"
     >
-      <Button size="lg">
+      <Button size="lg" className="text-lg py-6">
         <Chrome className="h-8 w-8" />
         Add to Chrome
       </Button>

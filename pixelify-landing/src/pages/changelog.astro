@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import Post from '@/components/post.astro';
+
+import { getImage } from 'astro:assets'
+
+let posts = (await getCollection('changelog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const latestPost = posts[0]
+const image = await getImage({
+  src: latestPost.data.heroImage,
+})
+
+---
+
+<Layout
+  image={image.src}
+  title={`Pixelify | ${latestPost.data.title}`}
+  description={latestPost.data.description}
+>
+
+<main class="w-full flex flex-col items-center">
+  <section class="max-w-3xl p-1">
+    <ol class="py-8">
+    {posts.map((post) => (<Post post={post}/>))}
+    </ol>
+  </section>
+</main>
+
+</Layout>

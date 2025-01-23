@@ -2,14 +2,25 @@
 import { CtaButton } from '@/components/add-to-chrome-button'
 
 import { Image } from 'astro:assets'
+import { X } from 'lucide-react'
 import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
 ---
 
 <footer class="p-4 flex justify-center pb-8">
-  <div class="max-w-lg flex flex-wrap items-center gap-4 bg-purple rounded-lg p-4 justify-center">
+  <div class="max-w-lg flex flex-wrap items-center gap-4 bg-purple rounded-lg p-6 justify-center relative">
+
+    <a
+      class="absolute top-1 right-1 w-4 h-4 text-destructive-foreground bg-destructive rounded-sm"
+      href="https://chrome.google.com/webstore/detail/pixelify/kahgplgodldegnapinchdllbpobjmced"
+      target="_blank"
+    >
+    <X className="w-4 h-4" />
+    </a>
+
+
     <div class="w-64 flex-initial flex flex-col items-center gap-4">
-      <p class="text-lg text-center font-bold">
-        Block distractive images and
+      <p class="text-primary text-lg text-center text-muted-foreground font-bold">
+        <span class="opacity-80">Block distractive images and</span>
         <strong>stay focused</strong>
       </p>
 

@@ -6,11 +6,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { CtaButton } from "@/components/add-to-chrome-button"
 import { Chrome } from "lucide-react"
 
-import { Power, Check } from "lucide-react"
+import { Power } from "lucide-react"
 
-import { HoverScrenshot } from '@/components/hover-screenshot'
+import { ScreenshotGallery } from '@/components/screenshot-gallery'
 
-import { Image } from 'astro:assets'
+import { getImage, Image } from 'astro:assets'
 
 import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
 import GmailScreenshot from '@/assets/gmail-screenshot.png'
@@ -19,6 +19,37 @@ import SocialMediaScreenshot from '@/assets/social-media-screenshot.png'
 import OptionsPageScreenshot from '@/assets/options-page.png'
 import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
 
+
+const images = await Promise.all(
+  [
+    GmailScreenshot,
+    SearchScreenshot,
+    SocialMediaScreenshot,
+  ].map(im => getImage({src: im}))
+)
+
+const metadata = [
+  {
+    title: "Respond to Emails",
+    alt: "Mail app screenshot",
+  },
+  {
+    title: "Browse the web",
+    alt: "Search app screenshot",
+  },
+  {
+    title: "Engage on Social Media",
+    alt: "SocialMedia app screenshot",
+  },
+]
+
+const screenshots = images.map((im, idx) => {
+  const meta = metadata[idx]
+  return {
+    ...im,
+    ...meta,
+  }
+})
 ---
 
 <Layout>
@@ -33,14 +64,10 @@ import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
 
     <div class="flex justify-center flex-col items-center gap-8">
 
-    <h2 class="text-4xl font-semibold text-center max-w-sm">
-      <span class="opacity-80">
-        Cut Distractions by
-      </span>
+    <h2 class="text-primary text-4xl font-semibold text-center max-w-sm">
+      <span class="opacity-80">Cut Distractions by</span>
       <strong class="font-extrabold">Eliminating</strong>
-      <span class="opacity-80">
-        Triggers
-      </span>
+      <span class="opacity-80">Triggers</span>
     </h2>
 
 
@@ -51,7 +78,7 @@ import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
       variant="outline"
     >
       <Power
-        className="w-12 h-12"
+        className="w-8 h-8"
         strokeWidth={3}
       />
       Turn On Pixelify
@@ -74,74 +101,28 @@ import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
 </section>
 
 
-<section class="px-4 py-8">
-  <Card className="w-full max-w-md mx-auto">
-    <CardHeader>
-      <h3 class="text-2xl">
-        Get Stuff Done
-      </h3>
-      <p>
-        The purpose is to
-        <strong class="text-purple-foreground">Increase&nbsp;your&nbsp;Productivity</strong>.
-      </p>
-    </CardHeader>
-    <CardContent className="">
+<section class="w-full px-4 py-8 flex flex-col items-center">
+  <div
+    class="max-w-3xl w-full py-8 flex flex-col sm:flex-row items-center"
+  >
+    <ScreenshotGallery screenshots={screenshots} client:load />
+
+    <div class="pt-16 flex justify-center flex-col items-center gap-8">
+    <h3 class="text-2xl font-medium">
+      Get Stuff Done
+    </h3>
+
+    <p class="text-muted-foreground text-4xl font-semibold text-center max-w-sm text-center">
+      The purpose is to
+      <strong class="font-extrabold text-purple-foreground">Increase your Productivity</strong>.
+    </p>
+
+    <CtaButton/>
+
+    </div>
+</div>
 
 
-    <ol class="text-lg gap-2 flex flex-col">
-      <li class="flex justify-between">
-        <div class="flex items-center gap-1">
-          <Check className="w-4 pt-1" strokeWidth="3"/>
-          Respond to Emails
-        </div>
-<HoverScrenshot client:load>
-  <Image
-    src={GmailScreenshot}
-    alt={"Gmail app screenshot"}
-    width={1662}
-    height={1040}
-    class="rounded shadow-lg sm:w-96 w-64"
-    format="webp"
-  />
-</HoverScrenshot>
-      </li>
-      <li class="flex justify-between">
-        <div class="flex items-center gap-1">
-          <Check className="w-4 pt-1" strokeWidth="3"/>
-          Browse the web
-        </div>
-<HoverScrenshot client:load>
-  <Image
-    src={SearchScreenshot}
-    alt={"Search app screenshot"}
-    width={1405}
-    height={1040}
-    class="rounded shadow-lg sm:w-96 w-64"
-    format="webp"
-  />
-</HoverScrenshot>
-      </li>
-      <li class="flex justify-between">
-        <div class="flex items-center gap-1">
-          <Check className="w-4 pt-1" strokeWidth="3"/>
-          Engage on Social Media
-        </div>
-<HoverScrenshot client:load>
-  <Image
-    src={SocialMediaScreenshot}
-    alt={"Social Media app screenshot"}
-    width={1754}
-    height={1040}
-    class="rounded shadow-lg sm:w-96 w-64"
-    format="webp"
-  />
-</HoverScrenshot>
-      </li>
-    </ol>
-
-
-    </CardContent>
-  </Card>
 </section>
 
 
@@ -150,7 +131,7 @@ import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
     <h2 class="text-2xl font-bold py-2 max-w-prose">
       Effortlessly manage your Blocklist
     </h2>
-    <p class="text-md pb-6 max-w-prose">
+    <p class="text-muted-foreground text-md pb-6 max-w-prose">
       Set Light or Dark theme, if you will.
       Block websites you find addictive and&nbsp;strive!
     </p>
@@ -171,7 +152,7 @@ import TwoClickScreenshot from '@/assets/2-click-screenshot.png'
       Pixelify is all about
       <strong>Speed and Efficiency</strong>.
     </h2>
-    <p class="text-md pb-6 max-w-prose">
+    <p class="text-muted-foreground text-md pb-6 max-w-prose">
       Add website to Blocklist with just 2 clicks,
       after that images will be pixelated automatically.
       Temporarily disable pixelation on active website in 2 clicks!
