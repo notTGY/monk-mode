@@ -3,6 +3,7 @@ import { CollectionEntry, render } from 'astro:content'
 import { Image } from 'astro:assets'
 
 import { Circle } from 'lucide-react'
+import { Separator } from "@/components/ui/separator"
 
 interface Props {
   post: CollectionEntry<'changelog'>
@@ -35,6 +36,9 @@ const { Content } = await render(post)
         })
       }
     </time>
-    <Content />
+    <div class="prose dark:prose-invert">
+      <Content />
+    </div>
+    <Separator/>
   </div>
 </li>

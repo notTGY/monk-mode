@@ -67,7 +67,7 @@ export function Header() {
   return (
     <div className="container mx-auto md:px-6 lg:px-8 border-b-4 flex justify-center">
       <header className="max-w-3xl flex h-20 w-full shrink-0 items-center px-2 md:px-6">
-        <a href="/" className="flex items-center">
+        <a href="/" className="flex items-center pr-2">
           <LogoIcon className="h-12 w-12" />
           <span className="text-xl">Pixelify</span>
         </a>

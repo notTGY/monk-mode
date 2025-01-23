@@ -12,7 +12,8 @@ export default {
     		colors: {
           purple: {
             DEFAULT: 'hsl(var(--purple))',
-            foreground: 'hsl(var(--purple-foreground))'
+            foreground: 'hsl(var(--purple-foreground))',
+            alternative: 'hsl(var(--purple-alternative))'
           },
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',
@@ -57,5 +58,5 @@ export default {
     		}
     	}
     },
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
 }
