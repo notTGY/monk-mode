@@ -4,12 +4,14 @@ export interface Website {
   icon: string;
   title: string;
   url: string;
+  id: number;
 }
 
 const mockWebsiteInfo: Website = {
   icon: "",
   title: "Who are you? We don't know you - Gmail",
   url: "chrome://extensions/?errors=dahpciklgjejlidilfhgonackmmodkao",
+  id: 0,
 }
 
 const fetchWebsiteInfo = async (): Promise<Website> => {
@@ -34,6 +36,7 @@ const fetchWebsiteInfo = async (): Promise<Website> => {
           icon: tab.favIconUrl || '', // The favicon URL of the page
           title: tab.title || '',     // The title of the page
           url: tab.url || '',         // The URL of the page
+          id: tab.id || 0,
         })
       } else {
         reject(new Error('No active tab found'))

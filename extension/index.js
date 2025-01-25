@@ -4,13 +4,12 @@ const storageArea = chrome.storage.local
 
 let allImages = []
 let shouldPixelate = false
+
 const toggleShown = async () => {
   if (DEBUG) {
     console.log('toggling')
   }
-  shouldPixelate = shouldPixelate ^ true
-
-  storageArea.set({shouldPixelate})
+  shouldPixelate = !!(shouldPixelate ^ true)
 
   for (const image of allImages) {
     image.src = image.getAttribute(
@@ -157,6 +156,9 @@ const init = async () => {
         case 'toggle':
           await toggleShown()
           break
+        case 'requestStatus':
+          await sendResponse({shouldPixelate})
+          break
         default:
           throw new Error('Unknown action: ' + mes.action)
       }
@@ -167,7 +169,6 @@ const init = async () => {
     },
   )
 
-  storageArea.set({shouldPixelate})
 
   if (shouldPixelate) {
     setupListeners()

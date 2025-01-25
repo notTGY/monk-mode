@@ -29,14 +29,14 @@ const openSettings = () => {
 
 export default function Main() {
   const [
+    isLoadingWebsite, website,
+  ] = useCurrentWebsite()
+
+  const [
     isLoadingPixelifyStatus,
     isPixelifyActive,
     onToggle,
-  ] = usePixelifyStatus()
-
-  const [
-    isLoadingWebsite, website,
-  ] = useCurrentWebsite()
+  ] = usePixelifyStatus(isLoadingWebsite, website)
 
   const [
     isLoadingBlocklist,
@@ -46,7 +46,6 @@ export default function Main() {
     hostnameAction,
   ] = useWebsiteBlocklist(isLoadingWebsite, website)
 
-  
   const toggleText = isPixelifyActive ? (
     'Turn Off Pixelify'
   ) : (
@@ -79,7 +78,7 @@ export default function Main() {
         <Button 
           className="w-full text-xl rounded-full" 
           onClick={onToggle}
-          disabled={isLoadingPixelifyStatus}
+          disabled={isLoadingWebsite && isLoadingPixelifyStatus}
           variant={isPixelifyActive ? 'default' : 'outline'}
         >
           <Power className="w-8 h-8" strokeWidth={3} /> {toggleText}

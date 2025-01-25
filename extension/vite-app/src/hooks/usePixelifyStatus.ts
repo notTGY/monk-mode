@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { storage } from '@/lib/storage'
+import { Website } from '@/hooks/useCurrentWebsite'
 
-const togglePixelation = async () => {
+const togglePixelation = async (id: number) => {
   const message = { action: 'toggle' }
 
   if (typeof chrome.tabs == 'undefined') {
@@ -12,23 +12,25 @@ const togglePixelation = async () => {
     throw new Error('Not running in chrome extension')
     return
   }
-  const tabs = await chrome.tabs.query({})
-
-  await Promise.allSettled(
-    tabs
-      .filter(t => t.id)
-      .map(tab => chrome.tabs.sendMessage(tab.id!, message))
-  )
+  try {
+    await chrome.tabs.sendMessage(id, message)
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 
-const fetchPixelifyStatus = async (): Promise<boolean> => {
-  const obj: any = await storage.get('shouldPixelate')
-  const shouldPixelate = obj.shouldPixelate
+const fetchPixelifyStatus = async (id: number): Promise<boolean> => {
+  const message = {action:'requestStatus'}
+  const res = await chrome.tabs.sendMessage(id, message)
+  const shouldPixelate = res.shouldPixelate
   return shouldPixelate
 }
 
-export const usePixelifyStatus = (): [
+export const usePixelifyStatus = (
+  isLoadingWebsite: boolean,
+  website: Website,
+): [
   boolean,
   boolean,
   React.MouseEventHandler<HTMLButtonElement>,
@@ -40,19 +42,25 @@ export const usePixelifyStatus = (): [
     isPixelifyActive, setIsPixelifyActive,
   ] = useState(false)
 
+  const id = website?.id || 0
+
   useEffect(() => {
     const loadPixelifyStatus = async () => {
-      const data = await fetchPixelifyStatus()
+      const data = await fetchPixelifyStatus(id)
       setIsPixelifyActive(data)
       setIsLoadingPixelifyStatus(false)
     }
-    loadPixelifyStatus()
-  }, [])
+    if (!isLoadingWebsite) {
+      loadPixelifyStatus()
+    }
+  }, [id, isLoadingWebsite])
 
-  const onToggle = () => {
+  const onToggle = isLoadingWebsite
+    ? () => {}
+    : () => {
     setIsLoadingPixelifyStatus(true)
-    togglePixelation().then(async () => {
-      const data = await fetchPixelifyStatus()
+    togglePixelation(id).then(async () => {
+      const data = await fetchPixelifyStatus(id)
       setIsPixelifyActive(data)
       setIsLoadingPixelifyStatus(false)
     })
