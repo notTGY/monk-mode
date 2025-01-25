@@ -20,11 +20,11 @@
       "128": "icons/icon128.png"
     },
     "default_title": "Pixelify",
-    "default_popup": "popup-app/index.html"
+    "default_popup": "dist/popup.html"
   },
 
   "options_ui": {
-    "page": "options-app/index.html",
+    "page": "dist/options.html",
     "open_in_tab": true
   },
 

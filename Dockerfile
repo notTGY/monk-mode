@@ -1,5 +1,3 @@
-# FROM ghcr.io/nottgy/monk-mode/pi
-
 FROM node:20.12.0-alpine3.19 AS frontend-stage
 
 COPY ./pixelify-landing /
