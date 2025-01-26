@@ -1,5 +1,6 @@
 import './App.css'
 import { createElement, useState } from 'react'
+import { clsx } from 'clsx'
 import { Settings } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
@@ -37,7 +38,12 @@ export default function App() {
   }
 
   const bottomNav = (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-4">
+    <div className={clsx(
+      "fixed bottom-0 left-0 right-0 border-t bg-background p-4",
+      {
+        "max-w-[320px]": !import.meta.env.DEV,
+      },
+    )}>
       <div className="max-w-md mx-auto flex justify-between items-center">
       {pages.map((pageId, i) => (
         <Button

@@ -41,5 +41,9 @@
     "matches": ["https://*/**"],
     "js": ["pixelify.js", "index.js"],
     "css": ["styles.css"]
-  }]
+  }],
+
+  "background": {
+    "service_worker": "background.js"
+  }
 }

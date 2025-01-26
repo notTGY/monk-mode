@@ -1,4 +1,4 @@
-const DEBUG = false
+const DEBUG = true
 
 const storageArea = chrome.storage.local
 
@@ -218,6 +218,9 @@ const init = async () => {
           await toggleShown()
           break
         case 'requestStatus':
+          if (DEBUG) {
+            console.log({shouldPixelate})
+          }
           await sendResponse({shouldPixelate})
           break
         default:

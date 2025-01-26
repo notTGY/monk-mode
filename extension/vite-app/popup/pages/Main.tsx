@@ -52,7 +52,7 @@ export default function Main() {
   ] = useWebsiteBlocklist(isLoadingWebsite, website)
 
   const toggleText = t(`toggle-pixelify.${
-    isPixelifyActive ? 'action-on' : 'action-off'
+    isPixelifyActive ? 'action-off' : 'action-on'
   }`)
 
   const toggleDescription = t(`toggle-pixelify.description.${
@@ -77,6 +77,7 @@ export default function Main() {
           onClick={onToggle}
           disabled={isLoadingWebsite && isLoadingPixelifyStatus}
           variant={isPixelifyActive ? 'default' : 'outline'}
+          data-test-id="pix"
         >
           <Power className="w-8 h-8" strokeWidth={3} /> {toggleText}
         </Button>
