@@ -5,7 +5,7 @@ import * as ResizablePrimitive from "react-resizable-panels"
 import { cn } from "@/lib/utils"
 
 const ResizablePanelGroup = React.forwardRef<
-  HTMLDivElement,
+  ResizablePrimitive.ImperativePanelGroupHandle | null,
   React.ComponentProps<typeof ResizablePrimitive.PanelGroup>
 >(({
   className,
