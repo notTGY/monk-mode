@@ -2,7 +2,7 @@ import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/lib/button-variants"
 
 const AlertDialog = AlertDialogPrimitive.Root
 
@@ -98,7 +98,7 @@ AlertDialogDescription.displayName =
 
 const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
-  any
+  any // eslint-disable-line @typescript-eslint/no-explicit-any
 >(({ className, variant = 'default', ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}

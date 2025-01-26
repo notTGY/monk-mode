@@ -1,7 +1,7 @@
 import { storage } from '@/lib/storage'
 
 const sleep = async (): Promise<void> => new Promise(
-  (res, _) => setTimeout(res, 1000),
+  (res) => setTimeout(res, 1000),
 )
 
 type TBlocklist = Record<string, boolean>
