@@ -8,7 +8,7 @@ export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
 }>({
-  context: async ({ }, use) => {
+  context: async ({}: _, use) => { // eslint-disable-line no-empty-pattern
     const pathToExtension = path.join(__dirname, '../..');
     const context = await chromium.launchPersistentContext('', {
       channel: 'chromium',
@@ -18,7 +18,7 @@ export const test = base.extend<{
         `--load-extension=${pathToExtension}`,
       ],
     });
-    await use(context);
+    await use(context); // eslint-disable-line react-hooks/rules-of-hooks
     await context.close();
   },
   extensionId: async ({ context }, use) => {
@@ -28,7 +28,7 @@ export const test = base.extend<{
       background = await context.waitForEvent('serviceworker');
 
     const extensionId = background.url().split('/')[2];
-    await use(extensionId);
+    await use(extensionId); // eslint-disable-line react-hooks/rules-of-hooks
   },
 });
 export const expect = test.expect;

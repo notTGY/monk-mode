@@ -9,7 +9,7 @@ import {
 function Calendar() {
   const PanelGroup = useRef(null)
   const onLayout = (sizes: number[]) => {
-    //console.log({sizes})
+    console.log({sizes})
   }
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function Calendar() {
     if (pg != null) {
       console.log(pg.getLayout())
     }
-  }, [PanelGroup.current])
+  }, [])
 
   return (
     <div className="h-[300px]">
