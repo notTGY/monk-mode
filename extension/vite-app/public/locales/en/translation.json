@@ -1,0 +1,22 @@
+{
+  "lang": {
+    "en": "English",
+    "ru": "Russian",
+    "title": "Select Language"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "title": "Toggle theme"
+  },
+  "blocklist": {
+    "dialog": {
+      "remove": "Remove",
+      "title": "Are you absolutely sure?",
+      "description": "This action cannot be undone. This will remove $from your blocklist.",
+      "cancel": "Cancel",
+      "continue": "Continue"
+    }
+  }
+}

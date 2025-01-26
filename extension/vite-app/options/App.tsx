@@ -1,15 +1,18 @@
 import React, { useState } from "react"
 import { clsx } from "clsx"
+import { useTranslation } from 'react-i18next'
 
 import { ModeToggle } from '@/components/mode-toggle'
+import { LanguageSwitch } from '@/components/language-toggle'
 import { LogoIcon } from '@/components/logo-icon'
 import {
-  pages, page_to_component, page_to_title,
+  pages, page_to_component,
 } from './pages'
 
-const VERSION = "Alpha 1/21/2025"
+const VERSION = "Beta 1/28/2025"
 
 export default function App() {
+  const { t } = useTranslation('options')
   const initialPage = 0
   const [page, setPage] = useState(initialPage)
 
@@ -25,9 +28,14 @@ export default function App() {
       <header className="h-16 border-b flex items-center justify-between px-6">
         <div className="flex items-center">
           <LogoIcon className="h-12 w-12" />
-          <h1 className="text-lg">Pixelify options</h1>
+          <h1 className="text-lg">
+            {t('title')}
+          </h1>
         </div>
-        <ModeToggle/>
+        <div className="flex gap-2">
+          <LanguageSwitch/>
+          <ModeToggle/>
+        </div>
       </header>
       {/* Main content */}
       <div className="flex-1 flex">
@@ -47,7 +55,7 @@ export default function App() {
                   setPage(pages.indexOf(pageId))
                 }}
               >
-                {page_to_title[pageId]}
+                {t(`${pageId}.title`)}
               </a>
             ))}
           </nav>

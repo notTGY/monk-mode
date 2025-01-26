@@ -1,0 +1,27 @@
+{
+  "main": {
+    "title": "Pixelify",
+    "toggle-pixelify": {
+      "action-on": "Включить Pixelify",
+      "action-off": "Выключить Pixelify",
+      "description": {
+        "always-off": "Когда откроешь новое окно, картинки снова покажутся",
+        "always-on": "Когда откроешь новое окно, картинки снова скроются"
+      }
+    },
+    "blocklist": {
+      "title": "Текущий сайт",
+      "block-url": "Заблокировать страницу",
+      "unblock-url": "Разблокировать страницу",
+      "block-hostname": "Заблокировать домен",
+      "unblock-hostname": "Разблокировать домен",
+      "deeplink": "Управлять блокировками",
+      "about-url": "Спрячем картинки на",
+      "about-hostname": "Спрячем картинки на"
+    }
+  },
+  "settings": {
+    "title": "Настройки",
+    "more": "Больше настроек"
+  }
+}

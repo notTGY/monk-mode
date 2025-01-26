@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useTranslation } from 'react-i18next'
 
 import {
   getCurrentBlocklistedUrls,
@@ -13,6 +14,9 @@ import {
 } from '@/lib/blocklist'
 
 export default function Blocklist() {
+  const { t } = useTranslation('options', {
+    keyPrefix: 'blocklist',
+  })
   const [urls, setUrls] = useState<string[]>([])
   const [hostnames, setHostnames] = useState<string[]>([])
 
@@ -82,11 +86,15 @@ export default function Blocklist() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <h1 className="text-3xl font-bold">Blocklist</h1>
+      <h1 className="text-3xl font-bold">
+        {t('title')}
+      </h1>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Blocklisted websites</CardTitle>
+          <CardTitle className="text-lg">
+            {t('urls.title')}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
@@ -94,7 +102,9 @@ export default function Blocklist() {
               isUrlsLoading ? (
                 <Skeleton className="h-4 w-[200px]" />
               ) : (
-                <p className="text-sm">You have no blocklisted websites</p>
+                <p className="text-muted-foregound text-sm">
+                  {t('urls.empty')}
+                </p>
             ) : urls.map((url) => (
               <BlocklistItem
                 key={url}
@@ -108,7 +118,7 @@ export default function Blocklist() {
             className="flex gap-2"
           >
             <Input
-              placeholder="Add website to blocklist"
+              placeholder={t('urls.placeholder')}
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
               className="flex-1"
@@ -117,14 +127,18 @@ export default function Blocklist() {
             <Button
               type="submit"
               disabled={isUrlsLoading}
-            >Add</Button>
+            >
+              {t('urls.add')}
+            </Button>
           </form>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Blocklisted domains</CardTitle>
+          <CardTitle className="text-lg">
+            {t('hostnames.title')}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
@@ -132,7 +146,9 @@ export default function Blocklist() {
               isHostnamesLoading ? (
                 <Skeleton className="h-4 w-[160px]" />
               ) : (
-                <p className="text-sm">You have no blocklisted domains</p>
+                <p className="text-muted-foregound text-sm">
+                  {t('hostnames.empty')}
+                </p>
               ) : hostnames.map((hostname) => (
                 <BlocklistItem
                   key={hostname}
@@ -146,7 +162,7 @@ export default function Blocklist() {
             className="flex gap-2"
           >
             <Input
-              placeholder="Add domain to blocklist"
+              placeholder={t('hostnames.placeholder')}
               value={newHostname}
               onChange={(e) => setNewHostname(e.target.value)}
               className="flex-1"
@@ -155,7 +171,9 @@ export default function Blocklist() {
             <Button
               type="submit"
               disabled={isHostnamesLoading}
-            >Add</Button>
+            >
+              {t('hostnames.add')}
+            </Button>
           </form>
         </CardContent>
       </Card>

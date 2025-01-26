@@ -1,14 +1,10 @@
 import Blocklist from './Blocklist'
 
 export const pages: string[] = [
-  "Blocklist",
-  //"Schedule",
+  "blocklist",
+  //"schedule",
 ]
-export const page_to_title: Record<string, string> = {
-  "Blocklist": "Blocklist",
-  "Schedule": "Schedule",
-}
 export const page_to_component: Record<string, any> = {
-  "Blocklist": Blocklist,
-  "Schedule": Blocklist,
+  blocklist: Blocklist,
+  schedule: Blocklist,
 }

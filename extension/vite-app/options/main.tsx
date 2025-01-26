@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { ThemeProvider } from '@/components/theme-provider'
 
+import '@/i18n'
+
 if (import.meta.env.DEV) {
   document.documentElement.setAttribute(
     'data-env-dev', 'true'

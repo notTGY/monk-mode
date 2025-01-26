@@ -19,6 +19,8 @@ import {
   useWebsiteBlocklist,
 } from '@/hooks/useWebsiteBlocklist'
 
+import { useTranslation } from 'react-i18next'
+
 const openSettings = () => {
   if (import.meta.env.DEV) {
     console.log('opening options page')
@@ -28,6 +30,9 @@ const openSettings = () => {
 }
 
 export default function Main() {
+  const { t } = useTranslation('popup', {
+    keyPrefix: 'main'
+  })
   const [
     isLoadingWebsite, website,
   ] = useCurrentWebsite()
@@ -46,30 +51,22 @@ export default function Main() {
     hostnameAction,
   ] = useWebsiteBlocklist(isLoadingWebsite, website)
 
-  const toggleText = isPixelifyActive ? (
-    'Turn Off Pixelify'
-  ) : (
-    'Turn On Pixelify'
-  )
+  const toggleText = t(`toggle-pixelify.${
+    isPixelifyActive ? 'action-on' : 'action-off'
+  }`)
 
-  const toggleDescription = (isUrlBlocked || isHostnameBlocked) ? (
-    'When you open new window, images will be hidden again'
-  ) : (
-    'When you open new window, images will be shown again'
-  )
+  const toggleDescription = t(`toggle-pixelify.description.${
+    (isUrlBlocked || isHostnameBlocked) ?
+    'always-on' : 'always-off'
+  }`)
 
-  const urlActionText = isUrlBlocked ? (
-    'Unblock this page'
-  ) : (
-    'Block only this page'
-  )
+  const urlActionText = t(`blocklist.${
+    isUrlBlocked ? 'unblock-url' : 'block-url'
+  }`)
 
-  const hostnameActionText = isHostnameBlocked ? (
-    'Unblock entire website'
-  ) : (
-    'Block entire website'
-  )
-
+  const hostnameActionText = t(`blocklist.${
+    isHostnameBlocked ? 'unblock-hostname' : 'block-hostname'
+  }`)
 
   return (
     <div className="bg-background min-h-screen w-full h-full p-4 flex flex-col items-center pt-8">
@@ -91,7 +88,9 @@ export default function Main() {
       {/* Main Card */}
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-xl">Current website</CardTitle>
+          <CardTitle className="text-xl">
+            {t('blocklist.title')}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {isLoadingWebsite ? (
@@ -119,7 +118,7 @@ export default function Main() {
                   <Earth className="w-10 h-10 shrink-0" />
                 )
               }
-              <div className="space-y-1 max-w-48">
+              <div className="space-y-1 max-w-[calc(100%-3rem)]">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -127,8 +126,8 @@ export default function Main() {
                         {website.title}
                       </h3>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{website.title}</p>
+                    <TooltipContent align="start">
+                      <p className="max-w-[calc(100vw-2rem)] break-all">{website.title}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -139,8 +138,8 @@ export default function Main() {
                         {website.url}
                       </p>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{website.url}</p>
+                    <TooltipContent align="start">
+                      <p className="max-w-[calc(100vw-2rem)] break-all">{website.url}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -167,8 +166,12 @@ export default function Main() {
                     <TooltipTrigger asChild>
                       <Info/>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Images will be blurred on {website?.url}</p>
+                    <TooltipContent align="start">
+                      <p className="max-w-[calc(100vw-2rem)] break-all">
+                        {t('blocklist.about-url')}
+                        {' '}
+                        {website?.url || ''}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -191,8 +194,12 @@ export default function Main() {
                     <TooltipTrigger asChild>
                       <Info/>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Images will be blurred on {new URL(website?.url || '').hostname}</p>
+                    <TooltipContent align="start">
+                      <p className="max-w-[calc(100vw-2rem)] break-all">
+                        {t('blocklist.about-hostname')}
+                        {' '}
+                        {new URL(website?.url || '').hostname}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -209,7 +216,7 @@ export default function Main() {
               }}
               className="text-sm text-muted-foreground hover:text-primary underline underline-offset-4"
             >
-              Manage blocklist
+              {t('blocklist.deeplink')}
             </a>
           </div>
         </CardContent>

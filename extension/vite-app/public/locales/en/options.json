@@ -1,0 +1,21 @@
+{
+  "title": "Pixelify options",
+  "blocklist": {
+    "title": "Blocklist",
+    "urls": {
+      "title": "Blocklisted websites",
+      "empty": "You have no blocklisted websites",
+      "placeholder": "Add website to blocklist",
+      "add": "Add"
+    },
+    "hostnames": {
+      "title": "Blocklisted domains",
+      "empty": "You have no blocklisted domains",
+      "placeholder": "Add domain to blocklist",
+      "add": "Add"
+    }
+  },
+  "schedule": {
+    "title": "Schedule"
+  }
+}

@@ -1,15 +1,18 @@
 import './App.css'
 import { createElement, useState } from 'react'
+import { Settings } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import {
-  pages, page_to_component, page_to_title,
+  pages, page_to_component,
 } from './pages'
+import { useTranslation } from 'react-i18next'
 
 import 'keen-slider/keen-slider.min.css'
 import { useKeenSlider } from 'keen-slider/react'
 
 export default function App() {
+  const { t } = useTranslation('popup')
   const initialPage = 0
   const [page, setPage] = useState(initialPage)
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -43,7 +46,11 @@ export default function App() {
           onClick={() => navigate(pageId)}
           size="sm"
         >
-          {page_to_title[pageId]}
+          {t(`${pageId}.title`)}
+        {pageId === 'settings'
+          ? <Settings/>
+          : null
+        }
         </Button>
       ))}
       </div>

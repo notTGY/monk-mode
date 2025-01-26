@@ -1,0 +1,27 @@
+{
+  "main": {
+    "title": "Pixelify",
+    "toggle-pixelify": {
+      "action-on": "Turn On Pixelify",
+      "action-off": "Turn Off Pixelify",
+      "description": {
+        "always-off": "When you open new window, images will be shown again",
+        "always-on": "When you open new window, images will be hidden again"
+      }
+    },
+    "blocklist": {
+      "title": "Current website",
+      "block-url": "Block only this page",
+      "unblock-url": "Unblock this page",
+      "block-hostname": "Block entire domain",
+      "unblock-hostname": "Unblock domain",
+      "deeplink": "Manage blocklist",
+      "about-url": "Images will be blurred on",
+      "about-hostname": "Images will be blurred on"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "more": "More settings"
+  }
+}

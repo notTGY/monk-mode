@@ -10,7 +10,7 @@ export interface Website {
 const mockWebsiteInfo: Website = {
   icon: "",
   title: "Who are you? We don't know you - Gmail",
-  url: "chrome://extensions/?errors=dahpciklgjejlidilfhgonackmmodkao",
+  url: "chrome-extension://dahpciklgjejlidilfhgonackmmodkao/dist/options.html",
   id: 0,
 }
 
