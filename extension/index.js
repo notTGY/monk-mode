@@ -20,6 +20,8 @@ const toggleShown = async () => {
   }
   if (shouldPixelate) {
     await setupListeners()
+  } else {
+    unbindListeners()
   }
 }
 
@@ -74,6 +76,8 @@ const tryPixelating = async () => {
 }
 
 
+
+let telegramScrollElements = []
 const attachTelegramScroll = () => {
   if (location.host != 'web.telegram.org') return 
 
@@ -87,7 +91,23 @@ const attachTelegramScroll = () => {
     el.setAttribute('data-pixelify-mounted', true)
 
     el.addEventListener('scroll', tryPixelating)
+    telegramScrollElements.push(el)
   }
+}
+
+const onScroll = () => {
+  tryPixelating()
+  attachTelegramScroll()
+}
+
+const onMouseMove = () => {
+  tryPixelating()
+  attachTelegramScroll()
+}
+
+const onClick = () => {
+  tryPixelating()
+  attachTelegramScroll()
 }
 
 let __setupInited = false
@@ -100,25 +120,66 @@ const setupListeners = async () => {
     'data-pixelify-inited', true
   )
 
-  document.addEventListener('scroll', () => {
-    tryPixelating()
-    attachTelegramScroll()
-  })
-
-  document.addEventListener('mousemove', () => {
-    tryPixelating()
-    attachTelegramScroll()
-  })
-
-  document.addEventListener('click', () => {
-    tryPixelating()
-    attachTelegramScroll()
-  })
+  document.addEventListener('scroll', onScroll)
+  document.addEventListener('mousemove', onMouseMove)
+  document.addEventListener('click', onClick)
 
   await tryPixelating()
   attachTelegramScroll()
   //setInterval(addAttributes, 1000)
 }
+
+const unbindListeners = () => {
+  if (!__setupInited) {
+    return
+  }
+  __setupInited = false
+
+  document.documentElement.removeAttribute(
+    'data-pixelify-inited'
+  )
+  document.removeEventListener('scroll', onScroll)
+  document.removeEventListener('mousemove', onMouseMove)
+  document.removeEventListener('click', onClick)
+
+  for (const el of telegramScrollElements) {
+    el.removeEventListener('scroll', tryPixelating)
+    el.removeAttribute('data-pixelify-mounted')
+  }
+  telegramScrollElements = []
+}
+
+navigation.addEventListener('navigate', async (e) => {
+  const url = new URL(e.destination.url)
+  const currentHostname = url.hostname
+  const currentUrl = url.href
+
+  const blocklistedHostnames = (await storageArea.get(
+    'blocklistedHostnames'
+  )).blocklistedHostnames ?? {}
+  const blocklistedUrls = (await storageArea.get(
+    'blocklistedUrls'
+  )).blocklistedUrls ?? {}
+
+  if (
+    blocklistedHostnames[currentHostname]
+    || blocklistedUrls[currentUrl]
+  ) {
+    shouldPixelate = true
+  }
+
+  for (const image of allImages) {
+    image.src = image.getAttribute(
+      shouldPixelate
+        ? 'data-pixelated-src'
+        : 'data-og-src'
+    )
+  }
+
+  if (shouldPixelate) {
+    setupListeners()
+  }
+})
 
 const init = async () => {
   if (typeof window.__PixelateInited != 'undefined') {
