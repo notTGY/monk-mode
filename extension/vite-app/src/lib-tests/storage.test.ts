@@ -1,7 +1,8 @@
+import { vi, expect, describe, beforeEach, it } from 'vitest'
 import { storage } from '@/lib/storage'
 
 const mockLocalStorage = {
-  data: {},
+  data: {} as Record<string, any>,
   clear: vi.fn(() => {
     mockLocalStorage.data = {}
   }),

@@ -1,3 +1,4 @@
+import { vi, expect, describe, it, beforeEach } from 'vitest'
 import { storage } from '@/lib/storage'
 import {
   getCurrentBlocklistedHostnames,

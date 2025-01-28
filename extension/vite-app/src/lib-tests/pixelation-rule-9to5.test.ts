@@ -1,14 +1,12 @@
+import { vi, expect, describe, it, beforeEach } from 'vitest'
 import { getCurrentRulePixelation } from '@/lib/pixelation-rule'
-import { fetchIsBlocklisted } from '@/lib/blocklist'
-import { fetchSchedule } from '@/lib/schedule'
-import { vi } from 'vitest'
 
 const BLOCKLISTED_URL = 'https://example.com/blocklisted'
 const BLOCKLISTED_HOSTNAME = 'https://blocklisted.com/'
 const BLOCKLISTED = 'https://blocklisted.com/blocklisted'
 const ALLOWLISTED = 'https://example.com'
 
-vi.mock('@/lib/schedule', async (importOriginal) => {
+vi.mock('@/lib/schedule', async () => {
   return {
     fetchSchedule: vi.fn(
       async () => ({ is9to5: true })
@@ -29,6 +27,7 @@ vi.mock('@/lib/blocklist', async (importOriginal) => {
   }
 })
 
+
 describe('getCurrentRulePixelation', () => {
   describe('and current time is outside 9-5', () => {
     it('should return false', async () => {
@@ -47,7 +46,7 @@ describe('getCurrentRulePixelation', () => {
   })
 
   describe('and current time is within 9-5', () => {
-    let mockDate
+    let mockDate: Date
     beforeEach(() => {
       // Mock current hour as 10 (within 9-5)
       mockDate = new Date()
