@@ -4,8 +4,6 @@ Disable distractions on the web. This document is also sprint planner/backlog.
 ## Backlog
 
 ### schedule feature
-TODO: 9 - 5 local time block, that can be turned on in settings
-
 TODO: edit schedule (every day the same schedule)
 
 TODO: week view to change schedule between weekdays
