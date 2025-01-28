@@ -24,5 +24,5 @@ export const getCurrentRulePixelation = async (
   const isBlocklistedUrl = await fetchIsBlocklisted(
     { url: currentUrl },
   )
-  return isBlocklistedHostname || isBlocklistedUrl
+  return !!(isBlocklistedHostname || isBlocklistedUrl)
 }

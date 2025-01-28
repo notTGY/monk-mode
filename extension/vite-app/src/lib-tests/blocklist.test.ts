@@ -10,18 +10,15 @@ import {
 vi.mock('@/lib/utils', async (importOriginal) => {
   return {
     ...await importOriginal<typeof import('@/lib/utils')>(),
-    // this will only affect "foo" outside of the original module
     sleep: () => Promise.resolve()
   }
 })
 
-// Mock storage
 const mockStorage = {
   get: vi.fn(),
   set: vi.fn(),
 }
 
-// Reassign storage to mock storage
 storage.get = mockStorage.get
 storage.set = mockStorage.set
 
