@@ -20,12 +20,12 @@ Install playwright dependencies:
 npm run install-test
 ```
 
-Run e2e tests:
+Run e2e and integration tests:
 ```
 npm run test
 ```
 
 Run unit tests:
 ```
-npm run unit-test
+npm run test-unit
 ```

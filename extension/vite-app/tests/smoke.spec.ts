@@ -1,4 +1,6 @@
-import { test, expect } from '../fixtures/chrome-extension'
+import {
+  test, expect,
+} from '../fixtures/chrome-extension-prod'
 
 test('Pixelify button in popup', async ({ page, extensionId }) => {
   await page.goto(`chrome-extension://${extensionId}/dist/popup.html`)
