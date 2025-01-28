@@ -5,6 +5,41 @@ const storageArea = chrome.storage.local
 let allImages = []
 let shouldPixelate = false
 
+const getCurrentRulePixelation = async (rawUrl) => {
+  const url = new URL(rawUrl)
+  const currentHostname = url.hostname
+  const currentUrl = url.href
+
+  const blocklistedHostnames = (await storageArea.get(
+    'blocklistedHostnames'
+  )).blocklistedHostnames ?? {}
+  const blocklistedUrls = (await storageArea.get(
+    'blocklistedUrls'
+  )).blocklistedUrls ?? {}
+
+  const schedule = (await storageArea.get(
+    'schedule'
+  )).schedule ?? {}
+  const is9to5 = !!schedule.is9to5
+
+  const now = new Date()
+  const currentHour = now.getHours()
+  const isCurrent9to5 = currentHour >= 9 && currentHour <= 16
+  console.log({is9to5, isCurrent9to5})
+  if (is9to5 && !isCurrent9to5) {
+    return false
+  }
+
+
+  if (
+    blocklistedHostnames[currentHostname]
+    || blocklistedUrls[currentUrl]
+  ) {
+    return true
+  }
+  return false
+}
+
 const toggleShown = async () => {
   if (DEBUG) {
     console.log('toggling')
@@ -95,17 +130,7 @@ const attachTelegramScroll = () => {
   }
 }
 
-const onScroll = () => {
-  tryPixelating()
-  attachTelegramScroll()
-}
-
-const onMouseMove = () => {
-  tryPixelating()
-  attachTelegramScroll()
-}
-
-const onClick = () => {
+const onEvent = () => {
   tryPixelating()
   attachTelegramScroll()
 }
@@ -120,9 +145,9 @@ const setupListeners = async () => {
     'data-pixelify-inited', true
   )
 
-  document.addEventListener('scroll', onScroll)
-  document.addEventListener('mousemove', onMouseMove)
-  document.addEventListener('click', onClick)
+  document.addEventListener('scroll', onEvent)
+  document.addEventListener('mousemove', onEvent)
+  document.addEventListener('click', onEvent)
 
   await tryPixelating()
   attachTelegramScroll()
@@ -138,9 +163,9 @@ const unbindListeners = () => {
   document.documentElement.removeAttribute(
     'data-pixelify-inited'
   )
-  document.removeEventListener('scroll', onScroll)
-  document.removeEventListener('mousemove', onMouseMove)
-  document.removeEventListener('click', onClick)
+  document.removeEventListener('scroll', onEvent)
+  document.removeEventListener('mousemove', onEvent)
+  document.removeEventListener('click', onEvent)
 
   for (const el of telegramScrollElements) {
     el.removeEventListener('scroll', tryPixelating)
@@ -151,22 +176,8 @@ const unbindListeners = () => {
 
 navigation.addEventListener('navigate', async (e) => {
   const url = new URL(e.destination.url)
-  const currentHostname = url.hostname
-  const currentUrl = url.href
-
-  const blocklistedHostnames = (await storageArea.get(
-    'blocklistedHostnames'
-  )).blocklistedHostnames ?? {}
-  const blocklistedUrls = (await storageArea.get(
-    'blocklistedUrls'
-  )).blocklistedUrls ?? {}
-
-  if (
-    blocklistedHostnames[currentHostname]
-    || blocklistedUrls[currentUrl]
-  ) {
-    shouldPixelate = true
-  }
+  const isShouldPixelate = await getCurrentRulePixelation(e.destination.url)
+  shouldPixelate = isShouldPixelate
 
   for (const image of allImages) {
     image.src = image.getAttribute(
@@ -191,21 +202,10 @@ const init = async () => {
     console.log('initializing')
   }
 
-  const currentHostname = location.hostname
-  const currentUrl = location.href
-
-  const blocklistedHostnames = (await storageArea.get(
-    'blocklistedHostnames'
-  )).blocklistedHostnames ?? {}
-  const blocklistedUrls = (await storageArea.get(
-    'blocklistedUrls'
-  )).blocklistedUrls ?? {}
-
-  if (
-    blocklistedHostnames[currentHostname]
-    || blocklistedUrls[currentUrl]
-  ) {
-    shouldPixelate = true
+  const isShouldPixelate = await getCurrentRulePixelation(location.href)
+  shouldPixelate = isShouldPixelate
+  if (DEBUG) {
+    console.log({shouldPixelate})
   }
 
   chrome.runtime.onMessage.addListener(

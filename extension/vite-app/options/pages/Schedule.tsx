@@ -1,11 +1,22 @@
 import { useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Info } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+import { useSchedule } from '@/hooks/useSchedule'
+
+
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
-
-
 function Calendar() {
   const PanelGroup = useRef(null)
   const onLayout = (sizes: number[]) => {
@@ -35,10 +46,47 @@ function Calendar() {
 }
 
 export default function Schedule() {
+  const { t } = useTranslation('options', {
+    keyPrefix: 'schedule',
+  })
+  
+  const [
+    isLoading,
+    is9to5,
+    on9to5Change,
+  ] = useSchedule()
+
+
   return (
-    <main>
-      hi
-      <Calendar/>
-    </main>
+    <div className="max-w-3xl space-y-6">
+      <h1 className="text-3xl font-bold">
+        {t('title')}
+      </h1>
+
+      <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="9-5"
+            checked={is9to5}
+            onCheckedChange={on9to5Change}
+            disabled={isLoading}
+          />
+          <Label htmlFor="9-5">
+            {t('9-5.title')}
+          </Label>
+        </div>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info/>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-prose">{t('9-5.about')}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    </div>
   )
 }
