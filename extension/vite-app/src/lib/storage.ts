@@ -7,7 +7,7 @@ if (import.meta.env.DEV) {
     get() {
       return new Promise((res) => {
         let val: TStorage = {}
-        const v = globalThis.localStorage.getItem(local_key)
+        const v = localStorage.getItem(local_key)
         if (v != null) {
           try {
             val = JSON.parse(v)
@@ -21,7 +21,7 @@ if (import.meta.env.DEV) {
     set(val: object) {
       return new Promise((res) => {
         let oldVal: TStorage = {}
-        const v = globalThis.localStorage.getItem(local_key)
+        const v = localStorage.getItem(local_key)
         if (v != null) {
           try {
             oldVal = JSON.parse(v)
@@ -29,7 +29,7 @@ if (import.meta.env.DEV) {
             console.log('storage error', e)
           }
         }
-        res(globalThis.localStorage.setItem(
+        res(localStorage.setItem(
           local_key, JSON.stringify(
             Object.assign(oldVal, val),
           ),

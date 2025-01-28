@@ -24,7 +24,7 @@ let posts = (await getCollection('changelog'))
 
 const latestPost = posts[0]
 const image = await getImage({
-  src: latestPost.data.heroImage,
+  src: latestPost?.data?.heroImage,
 })
 
 export async function getStaticPaths() {
@@ -38,8 +38,8 @@ export async function getStaticPaths() {
 
 <Layout
   image={image.src}
-  title={`${t('title')} | ${latestPost.data.title}`}
-  description={latestPost.data.description}
+  title={`${t('title')} | ${latestPost?.data?.title}`}
+  description={latestPost?.data?.description}
 >
 
 <main class="w-full flex flex-col items-center">

@@ -14,7 +14,7 @@ const mockLocalStorage = {
   })
 }
 
-globalThis.localStorage = mockLocalStorage as any
+vi.stubGlobal('localStorage', mockLocalStorage)
 
 describe('Storage', () => {
   beforeEach(() => {
