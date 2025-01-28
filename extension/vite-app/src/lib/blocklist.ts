@@ -1,28 +1,40 @@
 import { storage } from '@/lib/storage'
-
-const sleep = async (): Promise<void> => new Promise(
-  (res) => setTimeout(res, 1000),
-)
+import { sleep } from '@/lib/utils'
 
 type TBlocklist = Record<string, boolean>
 export const getCurrentBlocklistedHostnames = async (): Promise<TBlocklist> => {
+  if (import.meta.env.DEV) {
+    await sleep()
+  }
   const blocklistedHostnames = (await storage.get(
     'blocklistedHostnames'
   )).blocklistedHostnames ?? {}
-  if (import.meta.env.DEV) {
-    await sleep()
-  }
   return blocklistedHostnames
 }
 export const getCurrentBlocklistedUrls = async (): Promise<TBlocklist> => {
-  const blocklistedUrls = (await storage.get(
-    'blocklistedUrls'
-  )).blocklistedUrls ?? {}
   if (import.meta.env.DEV) {
     await sleep()
   }
+  const blocklistedUrls = (await storage.get(
+    'blocklistedUrls'
+  )).blocklistedUrls ?? {}
   return blocklistedUrls
 }
+
+export const fetchIsBlocklisted = async (
+  req: { hostname?: string, url?: string },
+): Promise<boolean> => {
+  if (req.hostname) {
+    const blocklistedHostnames = await getCurrentBlocklistedHostnames()
+    return req.hostname in blocklistedHostnames
+  }
+  if (req.url) {
+    const blocklistedUrls = await getCurrentBlocklistedUrls()
+    return req.url in blocklistedUrls
+  }
+  return false
+}
+
 
 type BlocklistProp = { hostname?: string, url?: string }
 

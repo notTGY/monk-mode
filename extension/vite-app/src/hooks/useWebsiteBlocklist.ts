@@ -1,35 +1,11 @@
 import { useState, useEffect } from 'react'
-import { storage } from '@/lib/storage'
 
-import { Website } from '@/hooks/useCurrentWebsite'
-
-type TBlocklist = Record<string, boolean>
-const getCurrentBlocklistedHostnames = async (): Promise<TBlocklist> => {
-  const blocklistedHostnames = (await storage.get(
-    'blocklistedHostnames'
-  )).blocklistedHostnames ?? {}
-  return blocklistedHostnames
-}
-const getCurrentBlocklistedUrls = async (): Promise<TBlocklist> => {
-  const blocklistedUrls = (await storage.get(
-    'blocklistedUrls'
-  )).blocklistedUrls ?? {}
-  return blocklistedUrls
-}
-
-const fetchBlocklisted = async (
-  req: { hostname?: string, url?: string },
-): Promise<boolean> => {
-  if (req.hostname) {
-    const blocklistedHostnames = await getCurrentBlocklistedHostnames()
-    return req.hostname in blocklistedHostnames
-  }
-  if (req.url) {
-    const blocklistedUrls = await getCurrentBlocklistedUrls()
-    return req.url in blocklistedUrls
-  }
-  return false
-}
+import { Website } from '@/lib/website-info'
+import {
+  fetchIsBlocklisted,
+  block,
+  unblock,
+} from '@/lib/blocklist'
 
 export const useWebsiteBlocklist = (
   isLoadingWebsite: boolean, website: Website | null,
@@ -61,13 +37,7 @@ export const useWebsiteBlocklist = (
     if (!hostname) {
       throw new Error('Website hostname is null')
     }
-
-    const blocklistedHostnames = await getCurrentBlocklistedHostnames()
-
-    blocklistedHostnames[hostname] = true
-
-    await storage.set({blocklistedHostnames})
-
+    await block({hostname})
     setIsHostnameBlocked(true)
   }
 
@@ -83,15 +53,7 @@ export const useWebsiteBlocklist = (
     if (!hostname) {
       throw new Error('Website hostname is null')
     }
-
-    const blocklistedHostnames = await getCurrentBlocklistedHostnames()
-
-    if (hostname in blocklistedHostnames) {
-      delete blocklistedHostnames[hostname]
-    }
-
-    await storage.set({blocklistedHostnames})
-
+    await unblock({hostname})
     setIsHostnameBlocked(false)
   }
 
@@ -103,13 +65,7 @@ export const useWebsiteBlocklist = (
     if (!url) {
       throw new Error('Website url is null')
     }
-
-    const blocklistedUrls = await getCurrentBlocklistedUrls()
-
-    blocklistedUrls[url] = true
-
-    await storage.set({blocklistedUrls})
-
+    await block({url})
     setIsUrlBlocked(true)
   }
 
@@ -121,15 +77,7 @@ export const useWebsiteBlocklist = (
     if (!url) {
       throw new Error('Website url is null')
     }
-
-    const blocklistedUrls = await getCurrentBlocklistedUrls()
-
-    if (url in blocklistedUrls) {
-      delete blocklistedUrls[url]
-    }
-
-    await storage.set({blocklistedUrls})
-
+    await unblock({url})
     setIsUrlBlocked(false)
   }
 
@@ -146,10 +94,10 @@ export const useWebsiteBlocklist = (
     const hostname = new URL(url).hostname
 
     const fetchBlocks = async () => {
-      const isUrlBlocked = await fetchBlocklisted({url})
+      const isUrlBlocked = await fetchIsBlocklisted({url})
       setIsUrlBlocked(isUrlBlocked)
 
-      const isHostnameBlocked = await fetchBlocklisted({hostname})
+      const isHostnameBlocked = await fetchIsBlocklisted({hostname})
       setIsHostnameBlocked(isHostnameBlocked)
 
       setIsLoading(false)

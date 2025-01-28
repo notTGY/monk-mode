@@ -1,4 +1,3 @@
-import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Info } from 'lucide-react'
 import {
@@ -12,6 +11,8 @@ import { Label } from '@/components/ui/label'
 import { useSchedule } from '@/hooks/useSchedule'
 
 
+/*
+import { useRef, useEffect } from 'react'
 import {
   ResizableHandle,
   ResizablePanel,
@@ -44,6 +45,7 @@ function Calendar() {
     </div>
   )
 }
+*/
 
 export default function Schedule() {
   const { t } = useTranslation('options', {

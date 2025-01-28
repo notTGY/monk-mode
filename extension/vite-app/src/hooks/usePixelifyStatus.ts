@@ -1,44 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Website } from '@/hooks/useCurrentWebsite'
 
-const togglePixelation = async (id: number) => {
-  const message = { action: 'toggle' }
-
-  if (typeof chrome.tabs == 'undefined') {
-    if (import.meta.env.DEV) {
-      console.log('Sending to script', message)
-      return
-    }
-    throw new Error('Not running in chrome extension')
-    return
-  }
-  try {
-    await chrome.tabs.sendMessage(id, message)
-  } catch(e) {
-    console.log(e)
-  }
-}
-
-const mockStatus = false
-
-const fetchPixelifyStatus = async (id: number): Promise<boolean> => {
-  const message = {action:'requestStatus'}
-  if (typeof chrome.tabs == 'undefined') {
-    if (import.meta.env.DEV) {
-      console.log('Sending to script', message)
-      return mockStatus
-    }
-    throw new Error('Not running in chrome extension')
-  }
-  let res = { shouldPixelate: false }
-  try {
-    res = await chrome.tabs.sendMessage(id, message)
-  } catch(e) {
-    console.log(e)
-  }
-  const shouldPixelate = res.shouldPixelate
-  return shouldPixelate
-}
+import { togglePixelation, fetchPixelation } from '@/lib/pixelation'
+import { Website } from '@/lib/website-info'
 
 export const usePixelifyStatus = (
   isLoadingWebsite: boolean,
@@ -59,7 +22,7 @@ export const usePixelifyStatus = (
 
   useEffect(() => {
     const loadPixelifyStatus = async () => {
-      const data = await fetchPixelifyStatus(id)
+      const data = await fetchPixelation(id)
       setIsPixelifyActive(data)
       setIsLoadingPixelifyStatus(false)
     }
@@ -73,7 +36,7 @@ export const usePixelifyStatus = (
     : () => {
     setIsLoadingPixelifyStatus(true)
     togglePixelation(id).then(async () => {
-      const data = await fetchPixelifyStatus(id)
+      const data = await fetchPixelation(id)
       setIsPixelifyActive(data)
       setIsLoadingPixelifyStatus(false)
     })
