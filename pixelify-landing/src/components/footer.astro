@@ -1,6 +1,11 @@
 ---
 import { CtaButton } from '@/components/add-to-chrome-button'
 
+import { getLangFromUrl } from '@/i18n/utils'
+const lang = getLangFromUrl(Astro.url)
+import { useTranslation } from '@/i18n/utils'
+const { t } = useTranslation(lang)
+
 import { Image } from 'astro:assets'
 import { X } from 'lucide-react'
 import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
@@ -10,9 +15,9 @@ import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
   <div class="max-w-lg flex flex-wrap items-center gap-4 bg-gradient-to-bl from-purple to-purple-alternative rounded-lg p-6 justify-center relative">
 
     <a
-      aria-label="close"
+      aria-label={t('footer.close')}
       class="absolute top-1 right-1 w-4 h-4 text-destructive-foreground bg-destructive rounded-sm"
-      href="https://chrome.google.com/webstore/detail/pixelify/kahgplgodldegnapinchdllbpobjmced"
+      href={t('cws-link')}
       target="_blank"
     >
     <X className="w-4 h-4" />
@@ -21,19 +26,19 @@ import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
 
     <div class="w-64 flex-initial flex flex-col items-center gap-4">
       <p class="text-primary text-lg text-center text-muted-foreground font-bold">
-        <span class="opacity-80">Block distractive images and</span>
-        <strong>stay focused</strong>
+        <span class="opacity-80">{t('footer.title1')}</span>
+        <strong>{t('footer.title2')}</strong>
       </p>
 
-      <CtaButton/>
+      <CtaButton lang={lang}/>
 
       <p class="text-sm text-center font-medium">
-“It's free, and you can always change your mind later.”
+        {t('footer.quote')}
       </p>
     </div>
     <Image
       src={MonaLisaPixelated}
-      alt={"Pixelated Mona Lisa"}
+      alt={t('mona-lisa-alt')}
       width={330 / 2}
       height={493 / 2}
       class="flex-1 shrink-0 rounded shadow-lg max-w-32"
@@ -43,6 +48,6 @@ import MonaLisaPixelated from '@/assets/mona-lisa-pixelated.png'
 
 
   <div class="mt-6 pb-4 text-muted-foreground underline">
-    <a href="/privacy">Privacy Policy</a>
+    <a href="/privacy">{t('footer.privacy')}</a>
   </div>
 </footer>

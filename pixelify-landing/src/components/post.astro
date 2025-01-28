@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl } from '@/i18n/utils'
+const lang = getLangFromUrl(Astro.url)
 import { CollectionEntry, render } from 'astro:content'
 import { Image } from 'astro:assets'
 
@@ -16,7 +18,7 @@ const { Content } = await render(post)
 
 <li>
   <Circle className="w-6 h-6 text-purple"/>
-  <div class="border-l-2 border-purple ml-[calc(0.75rem-1px)] mt-[-2px] px-2">
+  <div class="border-l-2 border-purple ml-[calc(0.75rem-1px)] mt-[-2px] mb-[-2px] px-2">
 
     <Image
       width={1200}
@@ -29,7 +31,7 @@ const { Content } = await render(post)
     <h3 class="text-lg font-semibold p-1">{post.data.title}</h3>
     <time class="text-muted-foreground p-1" datetime={post.data.pubDate.toISOString()}>
       {
-        post.data.pubDate.toLocaleDateString('en-us', {
+        post.data.pubDate.toLocaleDateString(lang, {
           year: 'numeric',
           month: 'short',
           day: 'numeric',

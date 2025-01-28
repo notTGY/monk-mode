@@ -1,10 +1,13 @@
 ---
 import '@/styles/globals.css'
 import { Header } from '@/components/header'
+import { getLangFromUrl, useTranslation } from '@/i18n/utils'
+const lang = getLangFromUrl(Astro.url)
+const { t } = useTranslation(lang)
 
 const image = '/og_image.png'
-const title = 'Pixelify'
-const description = 'Block distractive images on websites to focus and get more work done.'
+const title = t('title')
+const description = t('description')
 
 import { Content } from '@/content/privacy.mdx'
 
@@ -65,7 +68,7 @@ import { Content } from '@/content/privacy.mdx'
 	}
 </script>
 
-    <Header client:load/>
+    <Header lang={lang} client:load/>
 
 <main class="w-full flex flex-col items-center">
   <section class="max-w-3xl p-1 prose dark:prose-invert">

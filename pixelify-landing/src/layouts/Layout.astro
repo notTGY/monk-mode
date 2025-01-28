@@ -2,6 +2,10 @@
 import '@/styles/globals.css'
 import { Header } from '@/components/header'
 import Footer from '@/components/footer.astro'
+import { getLangFromUrl, useTranslation } from '@/i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const { t } = useTranslation(lang)
 
 
 interface Props {
@@ -12,8 +16,8 @@ interface Props {
 
 const {
   image = '/og_image.png',
-  title = 'Pixelify',
-  description = 'Block distractive images on websites to focus and get more work done.',
+  title = t('title'),
+  description = t('description'),
 } = Astro.props
 
 ---
@@ -75,7 +79,7 @@ const {
 	}
 </script>
 
-    <Header client:load/>
+    <Header lang={lang} client:load/>
 		<slot />
     <Footer/>
 	</body>

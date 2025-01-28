@@ -33,16 +33,16 @@ const images = await Promise.all(
 
 const metadata = [
   {
-    title: "Respond to Emails",
-    alt: "Mail app screenshot",
+    title: "Проверяй почту",
+    alt: "Пример почтового приложения",
   },
   {
-    title: "Browse the web",
-    alt: "Search app screenshot",
+    title: "Ищи в поиске",
+    alt: "Пример поискового приложения",
   },
   {
-    title: "Engage on Social Media",
-    alt: "SocialMedia app screenshot",
+    title: "Общайся в социальных сетях",
+    alt: "Пример социальной сети",
   },
 ]
 
@@ -68,9 +68,9 @@ const screenshots = images.map((im, idx) => {
     <div class="flex justify-center flex-col items-center gap-8">
 
     <h2 class="text-primary text-4xl font-semibold text-center max-w-sm">
-      <span class="opacity-80">Cut Distractions by</span>
-      <strong class="font-extrabold">Eliminating</strong>
-      <span class="opacity-80">Triggers</span>
+      <span class="opacity-80">Меньше отвлекайся</span>
+      <strong class="font-extrabold">Уничтожая</strong>
+      <span class="opacity-80">Триггеры</span>
     </h2>
 
 
@@ -84,7 +84,7 @@ const screenshots = images.map((im, idx) => {
         className="w-8 h-8"
         strokeWidth={3}
       />
-      Turn On Pixelify
+      Включить Pixelify
     </Button>
 
     </div>
@@ -112,12 +112,12 @@ const screenshots = images.map((im, idx) => {
 
     <div class="pt-16 flex justify-center flex-col items-center gap-8">
     <h3 class="text-2xl font-medium">
-      Get Stuff Done
+      Работай
     </h3>
 
     <p class="text-muted-foreground text-4xl font-semibold text-center max-w-sm text-center">
-      The purpose is to
-      <strong class="font-extrabold text-purple-foreground">Increase your Productivity</strong>.
+      Цель Pixelify - 
+      <strong class="font-extrabold text-purple-foreground">Увеличить твою Продуктивность</strong>.
     </p>
 
     <CtaButton lang={lang}/>
@@ -132,15 +132,15 @@ const screenshots = images.map((im, idx) => {
 <section class="p-4 py-8 flex flex-col items-center">
   <div class="max-w-3xl w-full sm:px-8">
     <h2 class="text-2xl font-bold py-2 max-w-prose">
-      Effortlessly manage your Blocklist
+      Легко контроллируй заблокированные сайты
     </h2>
     <p class="text-muted-foreground text-md pb-6 max-w-prose">
-      Set Light or Dark theme, if you will.
-      Block websites you find addictive and&nbsp;strive!
+      Ставь светлую или тёмную тему, если угодно.
+      Блокируй навязчивые сайты и устремляйся к совершенству!
     </p>
     <Image
       src={OptionsPageScreenshot}
-      alt={"Options page screenshot"}
+      alt={"Настройки приложения"}
       width={822*2}
       height={493*2}
       class="shadow-lg"
@@ -152,17 +152,17 @@ const screenshots = images.map((im, idx) => {
 <section class="p-4 py-8 flex flex-col items-center">
   <div class="max-w-3xl w-full sm:px-8 flex flex-col items-end">
     <h2 class="text-2xl font-bold py-2 max-w-prose">
-      Pixelify is all about
-      <strong>Speed and Efficiency</strong>.
+      Pixelify - это про
+      <strong>Скорость и Эффективность</strong>.
     </h2>
     <p class="text-muted-foreground text-md pb-6 max-w-prose">
-      Add website to Blocklist with just 2 clicks,
-      after that images will be pixelated automatically.
-      Temporarily disable pixelation on active website in 2 clicks!
+      Заблокируй сайт в два клика,
+      после этого картинки будут автоматически скрываться.
+      Временно отключи скрытие на текущем сайте в два клика!
     </p>
     <Image
       src={TwoClickScreenshot}
-      alt={"Interaction screenshot"}
+      alt={"Пример взаимодействия"}
       width={1165*2}
       height={632*2}
       class="rounded-lg shadow-lg"

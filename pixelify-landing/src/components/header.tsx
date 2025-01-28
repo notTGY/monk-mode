@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from '@/components/mode-toggle'
-//import { LanguageSelector } from '@/components/language-selector'
+import { LanguageToggle } from '@/components/language-toggle'
+import { useTranslation } from '@/i18n/utils'
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 import {
   HoverCard,
@@ -21,26 +23,33 @@ import {
   ListItem,
 } from '@/components/ui/navigation-list-item'
 
-export function NavigationMenuMore() {
+export function NavigationMenuMore({
+  lang,
+}: {lang: string}) {
+  const { t } = useTranslation(lang)
+  const root = getRelativeLocaleUrl(lang, "/")
+  const blog = getRelativeLocaleUrl(lang, "/blog")
+  const changelog = getRelativeLocaleUrl(lang, "/changelog")
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>More</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t('header.more')}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-6 w-[13.5rem] md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <a
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
-                    href="/"
+                    href={root}
                   >
                     <LogoIcon className="h-12 w-12" />
                     <div className="mb-2 mt-4 text-lg font-medium">
-                      Pixelify
+                      {t('title')}
                     </div>
                     <p className="text-sm leading-tight text-muted-foreground">
-                      Block distractive images on websites to focus and get more work done.
+                      {t('description')}
                     </p>
                   </a>
                 </NavigationMenuLink>
@@ -50,11 +59,11 @@ export function NavigationMenuMore() {
                 Learn how to use Pixelify to its fullest effect.
               </ListItem>
               */}
-              <ListItem href="/blog" title="Blog">
-                Get insights into future of Pixelify.
+              <ListItem href={blog} title={t('header.blog')}>
+                {t('header.blog.description')}
               </ListItem>
-              <ListItem href="/changelog" title="Changelog">
-                Explore latest changes and stay on top of updates.
+              <ListItem href={changelog} title={t('header.changelog')}>
+                {t('header.changelog.description')}
               </ListItem>
             </ul>
           </NavigationMenuContent>
@@ -65,18 +74,24 @@ export function NavigationMenuMore() {
 }
 
 
-export function Header() {
+export function Header({
+  lang,
+}: {lang: string}) {
+  const { t } = useTranslation(lang)
+  const root = getRelativeLocaleUrl(lang, "/")
+
   return (
     <div className="container mx-auto md:px-6 lg:px-8 border-b-4 flex justify-center">
       <header className="max-w-3xl flex h-20 w-full shrink-0 items-center px-2 md:px-6">
-        <a href="/" className="flex items-center pr-2">
+        <a href={root} className="flex items-center pr-2">
           <LogoIcon className="h-12 w-12" />
-          <span className="text-xl">Pixelify</span>
+          <span className="text-xl">{t('title')}</span>
         </a>
-          <NavigationMenuMore />
+          <NavigationMenuMore lang={lang} />
         <div className="ml-auto flex gap-4 items-center">
 
-          <ModeToggle/>
+          <LanguageToggle lang={lang}/>
+          <ModeToggle lang={lang}/>
         </div>
       </header>
     </div>

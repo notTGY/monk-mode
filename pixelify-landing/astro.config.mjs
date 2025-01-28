@@ -9,5 +9,9 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), tailwind(), mdx()]
+  integrations: [react(), tailwind(), mdx()],
+  i18n: {
+    locales: ["en", "ru"],
+    defaultLocale: "en",
+  },
 });

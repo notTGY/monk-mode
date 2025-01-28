@@ -16,10 +16,7 @@ import { getImage } from 'astro:assets'
 let posts = (await getCollection('changelog'))
   .filter(p => {
     const [l, ...slug] = p.id.split('/')
-    if (l in languages) {
-      return l === lang
-    }
-    return defaultLang === lang
+    return l === lang
   })
   .sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -29,6 +26,13 @@ const latestPost = posts[0]
 const image = await getImage({
   src: latestPost.data.heroImage,
 })
+
+export async function getStaticPaths() {
+  const paths = Object.keys(languages).map((l) => {
+    return {params: { lang: l }}
+  })
+  return paths
+}
 
 ---
 
