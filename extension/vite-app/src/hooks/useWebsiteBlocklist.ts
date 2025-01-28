@@ -6,10 +6,14 @@ import {
   block,
   unblock,
 } from '@/lib/blocklist'
+import {
+  getCurrentRulePixelation,
+} from '@/lib/pixelation-rule'
 
 export const useWebsiteBlocklist = (
   isLoadingWebsite: boolean, website: Website | null,
 ): [
+  boolean,
   boolean,
   boolean,
   boolean,
@@ -24,8 +28,23 @@ export const useWebsiteBlocklist = (
   const [
     isHostnameBlocked, setIsHostnameBlocked,
   ] = useState(false)
+  const [
+    isRuleBlocked, setIsRuleBlocked,
+  ] = useState(false)
+
+  useEffect(() => {
+    if (website?.url) {
+      const now = new Date()
+      getCurrentRulePixelation(
+        website?.url || '', now,
+      ).then((res) => {
+        setIsRuleBlocked(res)
+      })
+    }
+  }, [isHostnameBlocked, isUrlBlocked, website])
 
   const blockHostname = async () => {
+    setIsLoading(true)
     if (website == null) {
       throw new Error('Website is null')
     }
@@ -39,9 +58,11 @@ export const useWebsiteBlocklist = (
     }
     await block({hostname})
     setIsHostnameBlocked(true)
+    setIsLoading(false)
   }
 
   const unblockHostname = async () => {
+    setIsLoading(true)
     if (website == null) {
       throw new Error('Website is null')
     }
@@ -55,9 +76,11 @@ export const useWebsiteBlocklist = (
     }
     await unblock({hostname})
     setIsHostnameBlocked(false)
+    setIsLoading(false)
   }
 
   const blockUrl = async () => {
+    setIsLoading(true)
     if (website == null) {
       throw new Error('Website is null')
     }
@@ -67,9 +90,11 @@ export const useWebsiteBlocklist = (
     }
     await block({url})
     setIsUrlBlocked(true)
+    setIsLoading(false)
   }
 
   const unblockUrl = async () => {
+    setIsLoading(true)
     if (website == null) {
       throw new Error('Website is null')
     }
@@ -79,6 +104,7 @@ export const useWebsiteBlocklist = (
     }
     await unblock({url})
     setIsUrlBlocked(false)
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -118,6 +144,7 @@ export const useWebsiteBlocklist = (
     isLoading,
     isUrlBlocked,
     isHostnameBlocked,
+    isRuleBlocked,
     urlAction,
     hostnameAction,
   ]

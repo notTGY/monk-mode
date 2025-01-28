@@ -47,6 +47,7 @@ export default function Main() {
     isLoadingBlocklist,
     isUrlBlocked,
     isHostnameBlocked,
+    isRuleBlocked,
     urlAction,
     hostnameAction,
   ] = useWebsiteBlocklist(isLoadingWebsite, website)
@@ -56,8 +57,7 @@ export default function Main() {
   }`)
 
   const toggleDescription = t(`toggle-pixelify.description.${
-    (isUrlBlocked || isHostnameBlocked) ?
-    'always-on' : 'always-off'
+    isRuleBlocked ? 'always-on' : 'always-off'
   }`)
 
   const urlActionText = t(`blocklist.${

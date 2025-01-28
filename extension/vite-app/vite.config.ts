@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { dirname, resolve } from "path"
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from "vite"
@@ -7,6 +8,10 @@ import react from "@vitejs/plugin-react"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  test: {
+    include: ['src/**/*.test.*'],
+    globals: true,
+  },
   plugins: [react()],
   resolve: {
     alias: {

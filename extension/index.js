@@ -1,4 +1,4 @@
-const DEBUG = true
+const DEBUG = false
 
 const storageArea = chrome.storage.local
 
@@ -25,7 +25,9 @@ const getCurrentRulePixelation = async (rawUrl) => {
   const now = new Date()
   const currentHour = now.getHours()
   const isCurrent9to5 = currentHour >= 9 && currentHour <= 16
-  console.log({is9to5, isCurrent9to5})
+  if (DEBUG) {
+    console.log({is9to5, isCurrent9to5})
+  }
   if (is9to5 && !isCurrent9to5) {
     return false
   }

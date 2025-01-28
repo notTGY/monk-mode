@@ -24,3 +24,8 @@ Run e2e tests:
 ```
 npm run test
 ```
+
+Run unit tests:
+```
+npm run unit-test
+```

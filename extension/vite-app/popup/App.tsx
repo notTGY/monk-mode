@@ -51,6 +51,7 @@ export default function App() {
           variant={page == i ? "secondary" : "ghost"}
           onClick={() => navigate(pageId)}
           size="sm"
+          data-test-id={`${pageId}-button`}
         >
           {t(`${pageId}.title`)}
         {pageId === 'settings'

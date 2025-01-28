@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const sleep = async (): Promise<void> => new Promise(
-  (res) => setTimeout(res, 1000),
+  (res) => setTimeout(res, 250),
 )
