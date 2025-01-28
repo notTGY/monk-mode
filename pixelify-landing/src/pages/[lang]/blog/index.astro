@@ -26,7 +26,9 @@ const posts = (await getCollection('blog'))
   )
 
 export async function getStaticPaths() {
-  const paths = Object.keys(languages).map((l) => {
+  const paths = Object.keys(languages)
+    .filter(l => l != defaultLang)
+    .map((l) => {
     if (l == defaultLang) {
       return { params: { lang: l }}
     }

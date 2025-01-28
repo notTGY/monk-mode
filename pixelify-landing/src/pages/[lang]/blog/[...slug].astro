@@ -29,6 +29,8 @@ export async function getStaticPaths() {
       params: { slug, lang },
       props: post,
     }
+  }).filter(({ params }) => {
+    return params.lang != defaultLang
   })
 }
 type Props = CollectionEntry<'blog'>;

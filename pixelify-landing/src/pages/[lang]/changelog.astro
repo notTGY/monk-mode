@@ -28,7 +28,9 @@ const image = await getImage({
 })
 
 export async function getStaticPaths() {
-  const paths = Object.keys(languages).map((l) => {
+  const paths = Object.keys(languages)
+    .filter(l => l != defaultLang)
+    .map((l) => {
     return {params: { lang: l }}
   })
   return paths
