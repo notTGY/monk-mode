@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 	const posts = await getCollection('blog')
 	return posts.map((post) => {
     const [l, ...etc] = post.id.split('/')
-    let lang = 'en'
+    let lang = defaultLang
     let slug = post.id
     if (l in languages) {
       lang = l
