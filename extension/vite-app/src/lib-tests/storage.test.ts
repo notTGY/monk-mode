@@ -14,7 +14,12 @@ const mockLocalStorage = {
   })
 }
 
+const mockConsole = {
+  log: vi.fn(),
+}
+
 vi.stubGlobal('localStorage', mockLocalStorage)
+vi.stubGlobal('console', mockConsole)
 
 describe('Storage', () => {
   beforeEach(() => {
@@ -42,5 +47,8 @@ describe('Storage', () => {
     mockLocalStorage.setItem('chrome', 'invalid json')
     const errorData = await storage.get()
     expect(errorData).toEqual({})
+    expect(mockConsole.log).toBeCalledWith(
+      'storage error', expect.any(Error)
+    )
   })
 })
