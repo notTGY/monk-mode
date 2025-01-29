@@ -50,7 +50,10 @@ const image = await getImage({
 >
   <main class="p-1 flex flex-col items-center">
     <article class="max-w-3xl w-full prose dark:prose-invert">
-      <a href={getRelativeLocaleUrl(lang, `/blog`)}>
+      <a
+        href={getRelativeLocaleUrl(lang, `/blog`)}
+        class="pb-4 text-xs"
+      >
         {t('blog.back')}
       </a>
 
@@ -58,7 +61,7 @@ const image = await getImage({
         width={1200}
         height={675}
         src={post.data.heroImage}
-        class="rounded pt-4"
+        class="rounded"
         alt=""
         format="webp"
       />

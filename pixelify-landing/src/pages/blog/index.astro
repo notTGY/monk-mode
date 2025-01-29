@@ -39,7 +39,7 @@ export async function getStaticPaths() {
 <Layout>
   <main class="p-1 flex flex-col items-center">
     <section class="max-w-3xl w-full">
-      <ul class="grid grid-cols-2">
+      <ul class="grid grid-cols-2 gap-1 pt-4">
         {
           posts.map((post) => {
             const [l, ...etc] = post.id.split('/')
@@ -54,7 +54,7 @@ export async function getStaticPaths() {
                     width={1200}
                     height={675}
                     src={post.data.heroImage}
-                    class="rounded pt-4"
+                    class="rounded"
                     alt=""
                     format="webp"
                   />
