@@ -9,43 +9,8 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { useSchedule } from '@/hooks/useSchedule'
+import { Calendar } from '@/components/calendar'
 
-
-/*
-import { useRef, useEffect } from 'react'
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable"
-function Calendar() {
-  const PanelGroup = useRef(null)
-  const onLayout = (sizes: number[]) => {
-    console.log({sizes})
-  }
-
-  useEffect(() => {
-    const pg = PanelGroup.current
-    if (pg != null) {
-      console.log(pg.getLayout())
-    }
-  }, [])
-
-  return (
-    <div className="h-[300px]">
-      <ResizablePanelGroup
-        direction="vertical"
-        onLayout={onLayout}
-        ref={PanelGroup}
-      >
-        <ResizablePanel>One</ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel>Two</ResizablePanel>
-      </ResizablePanelGroup>
-    </div>
-  )
-}
-*/
 
 export default function Schedule() {
   const { t } = useTranslation('options', {
@@ -56,6 +21,10 @@ export default function Schedule() {
     isLoading,
     is9to5,
     on9to5Change,
+    isRange,
+    onIsRangeChange,
+    ranges,
+    onRangesChange,
   ] = useSchedule()
 
 
@@ -65,7 +34,7 @@ export default function Schedule() {
         {t('title')}
       </h1>
 
-      <div className="flex items-center space-x-8">
+      <div className="flex items-center space-x-8 pt-6">
         <div className="flex items-center space-x-2">
           <Switch
             id="9-5"
@@ -89,6 +58,42 @@ export default function Schedule() {
           </Tooltip>
         </TooltipProvider>
       </div>
+
+      <h2 className="text-2xl font-bold pt-6">
+        {t('range.title')}
+      </h2>
+
+      <div className="flex items-center space-x-8">
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="range"
+            checked={isRange}
+            onCheckedChange={onIsRangeChange}
+            disabled={isLoading}
+          />
+          <Label htmlFor="range">
+            {t('range.action')}
+          </Label>
+        </div>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info/>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="max-w-prose">{t('range.about')}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      <Calendar
+        isLoading={isLoading}
+        disabled={!isRange || isLoading}
+        ranges={ranges}
+        onRangesChange={onRangesChange}
+      />
     </div>
   )
 }

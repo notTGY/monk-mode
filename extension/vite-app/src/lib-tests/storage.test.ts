@@ -2,7 +2,7 @@ import { vi, expect, describe, beforeEach, it } from 'vitest'
 import { storage } from '@/lib/storage'
 
 const mockLocalStorage = {
-  data: {} as Record<string, any>,
+  data: {} as Record<string, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
   clear: vi.fn(() => {
     mockLocalStorage.data = {}
   }),

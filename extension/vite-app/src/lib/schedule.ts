@@ -3,6 +3,8 @@ import { sleep } from '@/lib/utils'
 
 type TShedule = {
   is9to5: boolean
+  isRange: boolean
+  ranges: string[]
 }
 
 export const fetchSchedule = async (): Promise<TShedule> => {
@@ -15,8 +17,7 @@ export const fetchSchedule = async (): Promise<TShedule> => {
   return schedule
 }
 
-export const changeSchedule = async (is9to5: boolean) => {
-  const schedule = { is9to5 }
+export const changeSchedule = async (schedule: TShedule) => {
   await storage.set({schedule})
 }
 
