@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import * as ResizablePrimitive from "react-resizable-panels"
 import {
   ResizableHandle,
@@ -69,20 +69,34 @@ const same = (sizes1: number[], sizes2: number[]) => {
 
 export function Calendar({
   disabled,
-  //ranges,
+  ranges,
   //onRangesChange,
 }: {
   disabled: boolean,
-  //ranges: string[],
-  //onRangesChange: (newRanges: string[], propagate: boolean) => void,
+  ranges: string[],
+  onRangesChange: (newRanges: string[], propagate: boolean) => void,
 }) {
   const PanelGroup = useRef<ResizablePrimitive.ImperativePanelGroupHandle | null>(null)
   const [localRanges, setLocalRanges] = useState(['09:00-17:00'])
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const onLocalRangesChange = (newRanges: string[]) => {
     setLocalRanges(newRanges)
-    //onRangesChange(newRanges, propagate)
+    //onRangesChange(newRanges, false)
   }
+
+  useEffect(() => {
+    if (isLoading && ranges.length > 0) {
+      setLocalRanges(ranges)
+      const newSizes = sizesFromRanges(ranges)
+      const pg = PanelGroup.current
+      if (pg) {
+        pg.setLayout(newSizes)
+      }
+      setIsLoading(false)
+    }
+  }, [ranges, isLoading])
 
   const layout = sizesFromRanges(localRanges)
 

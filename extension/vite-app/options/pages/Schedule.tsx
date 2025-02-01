@@ -92,10 +92,8 @@ export default function Schedule() {
       {isLoading ? null : (
       <Calendar
         disabled={!isRange || isLoading}
-        {...[]/*
         ranges={ranges}
         onRangesChange={onRangesChange}
-        */}
       />
       )}
     </div>
