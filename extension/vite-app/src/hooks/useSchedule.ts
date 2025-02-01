@@ -7,14 +7,18 @@ export function useSchedule() {
   const [isRange, setIsRange] = useState(false)
   const [ranges, setRanges] = useState<string[]>([])
 
+  const [initialRanges, setInitialRanges] = useState<string[]>([])
+
   useEffect(() => {
     fetchSchedule().then((schedule) => {
       setIs9to5(!!schedule.is9to5)
       setIsRange(!!schedule.isRange)
       if (schedule.ranges) {
         setRanges(schedule.ranges)
+        setInitialRanges(schedule.ranges)
       } else {
         setRanges(['09:00-17:00'])
+        setInitialRanges(['09:00-17:00'])
       }
       setIsLoading(false)
     })
@@ -52,9 +56,12 @@ export function useSchedule() {
       setIsLoading(false)
     })
   }
-  const onRangesChange = (newRanges: string[]) => {
+  const onRangesChange = (newRanges: string[], propagate: boolean) => {
     setIsLoading(true)
     setRanges(newRanges)
+    if (propagate) {
+      setInitialRanges(newRanges)
+    }
     changeSchedule({
       is9to5,
       isRange,
@@ -70,7 +77,7 @@ export function useSchedule() {
     on9to5Change,
     isRange,
     onIsRangeChange,
-    ranges,
+    initialRanges,
     onRangesChange,
   ]
 }

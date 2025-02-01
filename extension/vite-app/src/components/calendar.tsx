@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import * as ResizablePrimitive from "react-resizable-panels"
 import {
   ResizableHandle,
@@ -68,24 +68,28 @@ const same = (sizes1: number[], sizes2: number[]) => {
 
 
 export function Calendar({
-  isLoading,
   disabled,
-  ranges,
-  onRangesChange,
+  //ranges,
+  //onRangesChange,
 }: {
-  isLoading: boolean,
   disabled: boolean,
-  ranges: string[],
-  onRangesChange: (newRanges: string[]) => void,
+  //ranges: string[],
+  //onRangesChange: (newRanges: string[], propagate: boolean) => void,
 }) {
   const PanelGroup = useRef<ResizablePrimitive.ImperativePanelGroupHandle | null>(null)
+  const [localRanges, setLocalRanges] = useState(['09:00-17:00'])
 
-  const layout = sizesFromRanges(ranges)
+  const onLocalRangesChange = (newRanges: string[]) => {
+    setLocalRanges(newRanges)
+    //onRangesChange(newRanges, propagate)
+  }
+
+  const layout = sizesFromRanges(localRanges)
 
   const onLayout = (sizes: number[]) => {
     if (!same(sizes, layout) && !disabled) {
       const newRanges = rangesFromSizes(sizes)
-      onRangesChange(newRanges)
+      onLocalRangesChange(newRanges)
     }
   }
 
@@ -118,11 +122,16 @@ export function Calendar({
       {disabled ? null : (
         <Event
           idx={idx}
-          range={ranges[(idx-1)/2]}
+          range={localRanges[(idx-1)/2]}
           onChange={(range: string) => {
-            const newRanges = [...ranges]
+            const newRanges = [...localRanges]
             newRanges[(idx-1)/2] = range
-            onRangesChange(newRanges)
+            onLocalRangesChange(newRanges)
+            const newSizes = sizesFromRanges(newRanges)
+            const pg = PanelGroup.current
+            if (pg) {
+              pg.setLayout(newSizes)
+            }
           }}
         />
       )}
@@ -152,16 +161,14 @@ export function Calendar({
         )
       })}
       </div>
-      {isLoading ? null : (
-        <ResizablePanelGroup
-          direction="vertical"
-          onLayout={onLayout}
-          ref={PanelGroup}
-          className="absolute top-0 ps-8"
-        >
-          {Events}
-        </ResizablePanelGroup>
-      )}
+      <ResizablePanelGroup
+        direction="vertical"
+        onLayout={onLayout}
+        ref={PanelGroup}
+        className="absolute top-0 ps-8"
+      >
+        {Events}
+      </ResizablePanelGroup>
     </div>
   )
 }
