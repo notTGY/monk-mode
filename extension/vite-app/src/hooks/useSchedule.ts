@@ -5,7 +5,7 @@ export function useSchedule() {
   const [isLoading, setIsLoading] = useState(true)
   const [is9to5, setIs9to5] = useState(false)
   const [isRange, setIsRange] = useState(false)
-  const [ranges, setRanges] = useState<string[]>(['09:00-17:00'])
+  const [ranges, setRanges] = useState<string[]>([])
 
   useEffect(() => {
     fetchSchedule().then((schedule) => {
@@ -13,6 +13,8 @@ export function useSchedule() {
       setIsRange(!!schedule.isRange)
       if (schedule.ranges) {
         setRanges(schedule.ranges)
+      } else {
+        setRanges(['09:00-17:00'])
       }
       setIsLoading(false)
     })

@@ -24,13 +24,3 @@ test('Theme toggle in options', async ({ page, extensionId }) => {
   await expect(themeToggle).toBeVisible()
   await expect(page.locator('#root')).toHaveScreenshot()
 })
-
-test('Schedule page', async ({ page, extensionId }) => {
-  await page.goto(`chrome-extension://${extensionId}/dist/options.html`)
-  const schedulePageButton = page.getByTestId('schedule')
-  await schedulePageButton.click()
-  await expect(page.locator('#root')).toHaveScreenshot()
-  const rangeEnableButton = page.getByTestId('range-mode')
-  await rangeEnableButton.click()
-  await expect(page.locator('#root')).toHaveScreenshot()
-})

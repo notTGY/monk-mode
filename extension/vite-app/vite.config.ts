@@ -11,7 +11,6 @@ export default defineConfig({
   test: {
     include: ['src/**/*.test.*'],
   },
-  plugins: [react()],
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
@@ -28,5 +27,12 @@ export default defineConfig({
         popup: resolve(__dirname, 'popup.html'),
       },
     },
-  }
+  },
+  plugins: [react({
+    babel: {
+      plugins: [
+        "babel-plugin-react-compiler",
+      ],
+    },
+  })],
 })
