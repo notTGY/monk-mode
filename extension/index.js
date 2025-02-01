@@ -30,7 +30,7 @@ const getCurrentRulePixelation = async (rawUrl) => {
 
       const t0 = +m0 + 60*(+h0)
       const t1 = +m1 + 60*(+h1)
-      if (t0 <= t && t1 >= t) {
+      if (t0 > t || t1 < t) {
         return false
       }
     }

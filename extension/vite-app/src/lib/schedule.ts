@@ -18,6 +18,7 @@ export const fetchSchedule = async (): Promise<TShedule> => {
 }
 
 export const changeSchedule = async (schedule: TShedule) => {
+  console.log({schedule})
   await storage.set({schedule})
 }
 
