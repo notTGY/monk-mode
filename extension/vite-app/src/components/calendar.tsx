@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/resizable"
 import { Separator } from "@/components/ui/separator"
 
+import { useSchedule } from '@/hooks/useSchedule'
+
 import { Event } from '@/components/calendar-event'
 
 const MIN_SIZE = 3/24*100
@@ -69,13 +71,13 @@ const same = (sizes1: number[], sizes2: number[]) => {
 
 export function Calendar({
   disabled,
-  ranges,
-  //onRangesChange,
 }: {
   disabled: boolean,
-  ranges: string[],
-  onRangesChange: (newRanges: string[], propagate: boolean) => void,
 }) {
+  const scheduleOpts = useSchedule()
+  const ranges = scheduleOpts[5] as string[]
+  const onRangesChange = scheduleOpts[6] as (newRanges: string[], propagate: boolean)=>void
+
   const PanelGroup = useRef<ResizablePrimitive.ImperativePanelGroupHandle | null>(null)
   const [localRanges, setLocalRanges] = useState(['09:00-17:00'])
 
@@ -83,7 +85,7 @@ export function Calendar({
 
   const onLocalRangesChange = (newRanges: string[]) => {
     setLocalRanges(newRanges)
-    //onRangesChange(newRanges, false)
+    onRangesChange(newRanges, false)
   }
 
   useEffect(() => {
@@ -126,14 +128,12 @@ export function Calendar({
       <ResizablePanel
         key={`${idx}-event`}
         defaultSize={size}
-        className={clsx(
-          "rounded-lg flex justify-center items-center text-lg text-primary-foreground",
-          {"bg-primary/80": disabled},
-          {"bg-primary": !disabled},
-        )}
         minSize={MIN_SIZE}
+        className="px-3"
       >
-      {disabled ? null : (
+      {disabled ? (
+        <div className="w-full h-full bg-primary/80 rounded-lg"/>
+      ) : (
         <Event
           idx={idx}
           range={localRanges[(idx-1)/2]}
@@ -162,8 +162,11 @@ export function Calendar({
 
   return (
     <div className="relative">
-      <div className={clsx(
-      "text-xs h-full w-full grid grid-cols-1 justify-between gap-3",
+      <div
+        data-testid="calendar-times"
+        data-disabled={disabled}
+        className={clsx(
+        "text-xs h-full w-full grid grid-cols-1 justify-between gap-3",
       {"text-muted-foreground": disabled},
       )}>
       {new Array(24).fill(0).map((_, i) => {

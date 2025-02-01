@@ -16,7 +16,9 @@ export function Event({
   })
   const [startStr, endStr] = range.split('-')
   return (
-    <div className="w-content flex gap-1">
+    <div
+      className="h-full w-content flex gap-1 rounded-lg flex justify-center items-center text-lg text-primary-foreground bg-primary"
+    >
       <div className="flex flex-col items-start justify-center gap-1">
         <Label htmlFor={`tstart-${idx}`}>
           {t('start')}

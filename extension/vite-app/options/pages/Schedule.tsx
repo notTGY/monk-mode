@@ -23,8 +23,6 @@ export default function Schedule() {
     on9to5Change,
     isRange,
     onIsRangeChange,
-    ranges,
-    onRangesChange,
   ] = useSchedule()
 
 
@@ -89,13 +87,9 @@ export default function Schedule() {
         </TooltipProvider>
       </div>
 
-      {isLoading ? null : (
       <Calendar
         disabled={!isRange || isLoading}
-        ranges={ranges}
-        onRangesChange={onRangesChange}
       />
-      )}
     </div>
   )
 }
