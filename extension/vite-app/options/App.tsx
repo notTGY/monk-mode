@@ -44,6 +44,7 @@ export default function App() {
             {pages.map((pageId) => (
               <a
                 href="#"
+                data-testid={pageId}
                 className={clsx(
                   "text-lg block p-2 rounded-lg", {
                   "bg-accent text-accent-foreground": pages[page] == pageId,

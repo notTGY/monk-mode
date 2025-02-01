@@ -66,6 +66,7 @@ export default function Schedule() {
       <div className="flex items-center space-x-8">
         <div className="flex items-center space-x-2">
           <Switch
+            data-testid="range-mode"
             id="range"
             checked={isRange}
             onCheckedChange={onIsRangeChange}

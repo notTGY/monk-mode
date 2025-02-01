@@ -91,7 +91,7 @@ export function LanguageDrawer() {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2" data-test-id="language-drawer">
+        <Button variant="outline" className="flex items-center gap-2" data-testid="language-drawer">
           <Icon lang={currentLang} />
           <span>{currentLang}</span>
           <ChevronDown
