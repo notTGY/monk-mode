@@ -120,8 +120,9 @@ export function Calendar({
           idx={idx}
           range={ranges[(idx-1)/2]}
           onChange={(range: string) => {
-            ranges[(idx-1)/2] = range
-            onRangesChange(ranges)
+            const newRanges = [...ranges]
+            newRanges[(idx-1)/2] = range
+            onRangesChange(newRanges)
           }}
         />
       )}
