@@ -1,59 +1,11 @@
 const DEBUG = false
 
-const storageArea = chrome.storage.local
-
 let allImages = []
 let shouldPixelate = false
 
-const getCurrentRulePixelation = async (rawUrl) => {
-  const schedule = (await storageArea.get(
-    'schedule'
-  )).schedule ?? {}
-  const is9to5 = !!schedule.is9to5
-  const isRange = !!schedule.isRange
-  const ranges = schedule.ranges || []
-
-  const now = new Date()
-  const currentHour = now.getHours()
-  const isCurrent9to5 = currentHour >= 9 && currentHour <= 16
-  if (is9to5 && !isCurrent9to5) {
-    return false
-  }
-
-  if (isRange) {
-    const currentMinute = now.getMinutes()
-    const t = currentMinute + currentHour * 60
-    for (const range of ranges) {
-      const [rstart, rend] = range.split('-')
-      const [h0, m0] = rstart.split(':')
-      const [h1, m1] = rend.split(':')
-
-      const t0 = +m0 + 60*(+h0)
-      const t1 = +m1 + 60*(+h1)
-      if (t0 > t || t1 < t) {
-        return false
-      }
-    }
-  }
-
-  const url = new URL(rawUrl)
-  const currentHostname = url.hostname
-  const currentUrl = url.href
-
-  const blocklistedHostnames = (await storageArea.get(
-    'blocklistedHostnames'
-  )).blocklistedHostnames ?? {}
-  const blocklistedUrls = (await storageArea.get(
-    'blocklistedUrls'
-  )).blocklistedUrls ?? {}
-
-  return blocklistedHostnames[currentHostname] ||
-    blocklistedUrls[currentUrl]
-}
-
 const toggleShown = async () => {
   if (DEBUG) {
-    console.log('toggling')
+    console.log('toggling pixelation')
   }
   shouldPixelate = !!(shouldPixelate ^ true)
 
@@ -170,10 +122,10 @@ const unbindListeners = () => {
     return
   }
   __setupInited = false
-
   document.documentElement.removeAttribute(
     'data-pixelify-inited'
   )
+
   document.removeEventListener('scroll', onEvent)
   document.removeEventListener('mousemove', onEvent)
   document.removeEventListener('click', onEvent)
@@ -187,8 +139,7 @@ const unbindListeners = () => {
 
 navigation.addEventListener('navigate', async (e) => {
   const url = new URL(e.destination.url)
-  const isShouldPixelate = await getCurrentRulePixelation(e.destination.url)
-  shouldPixelate = isShouldPixelate
+  shouldPixelate = await getCurrentRulePixelation(e.destination.url)
 
   for (const image of allImages) {
     image.src = image.getAttribute(
@@ -204,17 +155,16 @@ navigation.addEventListener('navigate', async (e) => {
 })
 
 const init = async () => {
-  if (typeof window.__PixelateInited != 'undefined') {
+  if (typeof window.__PixelifyInited != 'undefined') {
     return
   }
-  window.__PixelateInited = true
+  window.__PixelifyInited = true
 
   if (DEBUG) {
     console.log('initializing')
   }
 
-  const isShouldPixelate = await getCurrentRulePixelation(location.href)
-  shouldPixelate = isShouldPixelate
+  shouldPixelate = await getCurrentRulePixelation(location.href)
   if (DEBUG) {
     console.log({shouldPixelate})
   }

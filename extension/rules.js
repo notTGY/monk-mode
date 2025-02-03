@@ -1,10 +1,10 @@
-import { fetchIsBlocklisted } from '@/lib/blocklist'
-import { fetchSchedule } from '@/lib/schedule'
+const storageArea = chrome.storage.local
 
-export const getCurrentRulePixelation = async (
-  rawUrl: string, now: Date,
-) => {
-  const schedule = await fetchSchedule()
+const getCurrentRulePixelation = async (rawUrl) => {
+  const now = new Date()
+  const schedule = (await storageArea.get(
+    'schedule'
+  )).schedule ?? {}
   const is9to5 = !!schedule.is9to5
   const isRange = !!schedule.isRange
   const ranges = schedule.ranges || []
@@ -21,7 +21,7 @@ export const getCurrentRulePixelation = async (
     for (const range of ranges) {
       const [rstart, rend] = range.split('-')
       const [h0, m0] = rstart.split(':')
-      let [h1, m1] = rend.split(':').map(Number)
+      let [h1, m1] = rend.split(':')
       if ((+h1) == 0 && (+m1) == 0) {
         h1 = 24
         m1 = 0
@@ -39,11 +39,13 @@ export const getCurrentRulePixelation = async (
   const currentHostname = url.hostname
   const currentUrl = url.href
 
-  const isBlocklistedHostname = await fetchIsBlocklisted(
-    { hostname: currentHostname },
-  )
-  const isBlocklistedUrl = await fetchIsBlocklisted(
-    { url: currentUrl },
-  )
-  return !!(isBlocklistedHostname || isBlocklistedUrl)
+  const blocklistedHostnames = (await storageArea.get(
+    'blocklistedHostnames'
+  )).blocklistedHostnames ?? {}
+  const blocklistedUrls = (await storageArea.get(
+    'blocklistedUrls'
+  )).blocklistedUrls ?? {}
+
+  return blocklistedHostnames[currentHostname] ||
+    blocklistedUrls[currentUrl]
 }

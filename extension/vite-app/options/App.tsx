@@ -9,7 +9,7 @@ import {
   pages, page_to_component,
 } from './pages'
 
-const VERSION = "Beta 1/28/2025"
+const VERSION = "Beta 2/4/2025"
 
 export default function App() {
   const { t } = useTranslation('options')
