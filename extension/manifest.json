@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Pixelify",
-  "version": "2",
+  "version": "2.1",
 
   "description": "Block distractive images on websites to focus and get more work done",
 
@@ -37,13 +37,13 @@
     }
   },
 
+  "background": {
+    "service_worker": "background.js"
+  },
+
   "content_scripts": [{
     "matches": ["https://*/**"],
     "js": ["pixelify.js", "rules.js", "index.js"],
     "css": ["styles.css"]
-  }],
-
-  "background": {
-    "service_worker": "background.js"
-  }
+  }]
 }

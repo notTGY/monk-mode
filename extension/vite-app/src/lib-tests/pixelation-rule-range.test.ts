@@ -1,4 +1,4 @@
-import { vi, expect, describe, it, beforeEach } from 'vitest'
+import { vi, expect, describe, it } from 'vitest'
 import { getCurrentRulePixelation } from '@/lib/pixelation-rule'
 
 const BLOCKLISTED_URL = 'https://example.com/blocklisted'
@@ -35,9 +35,23 @@ vi.mock('@/lib/blocklist', async (importOriginal) => {
 
 describe('getCurrentRulePixelation', () => {
   describe('and current time is outside range', () => {
-    it('should return false', async () => {
+    it('outside', async () => {
       const mockDate = new Date()
       mockDate.setHours(8)
+
+      const results = await Promise.all([
+        ALLOWLISTED, BLOCKLISTED_HOSTNAME,
+        BLOCKLISTED_URL, BLOCKLISTED,
+      ].map(
+        u => getCurrentRulePixelation(u, mockDate)
+      ))
+
+      expect(results).toEqual([false, false, false, false])
+    })
+    it('lower edge', async () => {
+      const mockDate = new Date()
+      mockDate.setHours(8)
+      mockDate.setMinutes(59)
 
       const results = await Promise.all([
         ALLOWLISTED, BLOCKLISTED_HOSTNAME,
@@ -51,42 +65,50 @@ describe('getCurrentRulePixelation', () => {
   })
 
   describe('and current time is within range', () => {
-    let mockDate: Date
-    beforeEach(() => {
-      mockDate = new Date()
+
+    it('center', async () => {
+      const mockDate = new Date()
       mockDate.setHours(10)
+
+      const results = await Promise.all([
+        ALLOWLISTED, BLOCKLISTED_HOSTNAME,
+        BLOCKLISTED_URL, BLOCKLISTED,
+      ].map(
+        u => getCurrentRulePixelation(u, mockDate)
+      ))
+
+      expect(results).toEqual([false, true, true, true])
     })
 
-    it('should return true if hostname is blocklisted', async () => {
-      const result = await getCurrentRulePixelation(
-        BLOCKLISTED_HOSTNAME, mockDate
-      )
+    it('upper edge', async () => {
+      const mockDate = new Date()
+      mockDate.setHours(23)
+      mockDate.setMinutes(59)
 
-      expect(result).toBe(true)
+      const results = await Promise.all([
+        ALLOWLISTED, BLOCKLISTED_HOSTNAME,
+        BLOCKLISTED_URL, BLOCKLISTED,
+      ].map(
+        u => getCurrentRulePixelation(u, mockDate)
+      ))
+
+      expect(results).toEqual([false, true, true, true])
     })
 
-    it('should return true if URL is blocklisted', async () => {
-      const result = await getCurrentRulePixelation(
-        BLOCKLISTED_URL, mockDate
-      )
+    it('lower edge', async () => {
+      const mockDate = new Date()
+      mockDate.setHours(9)
+      mockDate.setMinutes(0)
 
-      expect(result).toBe(true)
+      const results = await Promise.all([
+        ALLOWLISTED, BLOCKLISTED_HOSTNAME,
+        BLOCKLISTED_URL, BLOCKLISTED,
+      ].map(
+        u => getCurrentRulePixelation(u, mockDate)
+      ))
+
+      expect(results).toEqual([false, true, true, true])
     })
 
-    it('should return true if URL and hostname are blocklisted', async () => {
-      const result = await getCurrentRulePixelation(
-        BLOCKLISTED, mockDate
-      )
-
-      expect(result).toBe(true)
-    })
-
-    it('should return false if URL and hostname not blocklisted', async () => {
-      const result = await getCurrentRulePixelation(
-        ALLOWLISTED, mockDate
-      )
-
-      expect(result).toBe(false)
-    })
   })
 })
