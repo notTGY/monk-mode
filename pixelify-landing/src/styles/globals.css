@@ -3,9 +3,9 @@
 @tailwind utilities;
 @layer base {
   :root {
-    --purple: 271 70% 70%;
-    --purple-foreground: 271 70% 50%;
-    --purple-alternative: 271 70% 80%;
+    --purple: 28 70% 70%;
+    --purple-foreground: 28 70% 50%;
+    --purple-alternative: 28 70% 80%;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -33,9 +33,9 @@
     --radius: 0.5rem
   }
   .dark {
-    --purple: 271 70% 55%;
-    --purple-foreground: 271 70% 70%;
-    --purple-alternative: 271 70% 45%;
+    --purple: 28 70% 55%;
+    --purple-foreground: 28 70% 70%;
+    --purple-alternative: 28 70% 45%;
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
