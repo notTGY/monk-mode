@@ -6,9 +6,6 @@ Disable distractions on the web. This document is also sprint planner/backlog.
 ### schedule feature
 TODO: week view to change schedule between weekdays
 
-### customization feature
-TODO: change filters
-
 ### points feature
 
 ## low priority

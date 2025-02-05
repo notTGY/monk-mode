@@ -180,7 +180,7 @@ const init = async () => {
 
   currentFilter = (await storageArea.get(
     'currentFilter'
-  )).currentFilter ?? 'pixelify'
+  )).currentFilter ?? ''
 
   shouldPixelate = await getCurrentRulePixelation(location.href)
   if (DEBUG) {

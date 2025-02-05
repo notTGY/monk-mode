@@ -26,6 +26,12 @@
     "9-5": {
       "title": "9-to-5 mode",
       "about": "This will only activate blurring from 9:00 AM to 17:00 your local time, and deactive Pixelify outside working hours by default."
+    },
+    "filter": {
+      "original": "Original",
+      "darken": "Darken",
+      "pixelify": "Pixelify",
+      "loading": "Loading..."
     }
   }
 }

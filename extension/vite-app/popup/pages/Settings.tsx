@@ -1,4 +1,5 @@
-import { Settings } from 'lucide-react'
+import { clsx } from 'clsx'
+import { Settings, Redo, ChevronRight, ChevronLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Info } from 'lucide-react'
 
@@ -12,8 +13,13 @@ import {
 } from "@/components/ui/tooltip"
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 
 import { useSchedule } from '@/hooks/useSchedule'
+import { useFilter } from '@/hooks/useFilter'
+import { IMAGES } from '@/lib/filter'
+
+import og from '@/assets/original.webp'
 
 const openSettings = () => {
   if (import.meta.env.DEV) {
@@ -34,9 +40,68 @@ export default function SettingsComponent() {
     on9to5Change,
   ] = useSchedule()
 
+  const [
+    next,
+    prev,
+    isLoadingFilter,
+    selectedFilter,
+  ] = useFilter()
+
+  const image = isLoadingFilter ? og : IMAGES[selectedFilter]
+
   return (
     <div className="bg-background min-h-screen w-full h-full p-4 flex flex-col items-center pt-8">
-      <Card className="w-full max-w-md mt-[6.75rem] mb-8">
+      <div className="flex justify-center items-center gap-2">
+        <div className="flex flex-col items-center gap-1">
+          <img src={og} className="size-20 rounded-lg"/>
+          <span>{t('filter.original')}</span>
+        </div>
+        <Redo className="size-8 -scale-y-100"/>
+        <div className="w-40 flex flex-col items-center gap-1">
+          <img
+            src={image}
+            className={clsx("size-32 rounded-lg", {
+              "cursor-pointer": !isLoadingFilter,
+            })}
+            onClick={next}
+          />
+          <div className="flex items-center gap-2 w-full justify-between">
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={prev}
+              disabled={isLoadingFilter}
+              className="size-6 rounded-full"
+            >
+              <ChevronLeft/>
+            </Button>
+            {isLoadingFilter ? (
+              <span
+                className="text-muted-foreground"
+              >
+                {t(`filter.loading`)}
+              </span>
+            ) : (
+              <span
+                className="font-bold cursor-pointer"
+                onClick={next}
+              >
+                {t(`filter.${selectedFilter}`)}
+              </span>
+            )}
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={next}
+              disabled={isLoadingFilter}
+              className="size-6 rounded-full"
+            >
+              <ChevronRight/>
+            </Button>
+          </div>
+        </div>
+      </div>
+      <Card className="w-full max-w-md mt-4 mb-2">
         <CardHeader>
           <CardTitle className="flex flex-row items-center text-xl gap-2">
             <Settings className="mb-[-4px]"/>

@@ -28,5 +28,12 @@
       "start": "Start time",
       "end": "End time"
     }
+  },
+  "filter": {
+    "title": "Filter",
+    "original": "Original",
+    "darken": "Darken",
+    "pixelify": "Pixelify",
+    "loading": "Loading..."
   }
 }
