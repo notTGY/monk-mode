@@ -3,7 +3,7 @@ const ctx = c.getContext('2d', { willReadFrequently: true })
 
 const SIZE = 15
 
-const processLoadedImage = (image) => {
+const pixelifyLoadedImage = (image) => {
   let width = image.naturalWidth
   let height = image.naturalHeight
 
@@ -84,7 +84,7 @@ const pixelify = (image) => new Promise(
   newImage.setAttribute('crossorigin', 'anonymous')
 
   newImage.onload = () => {
-    const res = processLoadedImage(newImage)
+    const res = pixelifyLoadedImage(newImage)
     resolve(res)
   }
   newImage.onerror = reject

@@ -29,7 +29,7 @@ const processImage = async (image) => {
   }
   let res
   try {
-    res = await pixelify(image)
+    res = await darken(image)
   } catch(e) {
     console.log('Pixelify error: ', e)
     return null

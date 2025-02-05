@@ -4,14 +4,9 @@ Disable distractions on the web. This document is also sprint planner/backlog.
 ## Backlog
 
 ### schedule feature
-TODO: edit schedule (every day the same schedule)
-
 TODO: week view to change schedule between weekdays
 
 ### customization feature
-
-TODO: hardcode implementation
-
 TODO: change filters
 
 ### points feature

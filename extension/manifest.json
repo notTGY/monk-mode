@@ -43,7 +43,7 @@
 
   "content_scripts": [{
     "matches": ["https://*/**"],
-    "js": ["pixelify.js", "rules.js", "index.js"],
+    "js": ["color.js", "pixelify.js", "darken.js", "rules.js", "index.js"],
     "css": ["styles.css"]
   }]
 }
