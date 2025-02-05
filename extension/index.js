@@ -3,6 +3,8 @@ const DEBUG = false
 let allImages = []
 let shouldPixelate = false
 
+let currentFilter = 'pixelify'
+
 const toggleShown = async () => {
   if (DEBUG) {
     console.log('toggling pixelation')
@@ -10,11 +12,12 @@ const toggleShown = async () => {
   shouldPixelate = !!(shouldPixelate ^ true)
 
   for (const image of allImages) {
-    image.src = image.getAttribute(
-      shouldPixelate
-        ? 'data-pixelated-src'
-        : 'data-og-src'
-    )
+    if (!shouldPixelate) {
+      image.src = image.getAttribute('data-og-src')
+      continue
+    }
+
+    image.src = image.getAttribute('data-pixelated-src')
   }
   if (shouldPixelate) {
     await setupListeners()
@@ -29,7 +32,18 @@ const processImage = async (image) => {
   }
   let res
   try {
-    res = await darken(image)
+    switch (currentFilter) {
+      default:
+        if (DEBUG) {
+          console.error('unknown filter', currentFilter)
+        }
+      case 'pixelify':
+        res = await pixelify(image)
+        break
+      case 'darken':
+        res = await darken(image)
+        break
+    }
   } catch(e) {
     console.log('Pixelify error: ', e)
     return null
@@ -163,6 +177,10 @@ const init = async () => {
   if (DEBUG) {
     console.log('initializing')
   }
+
+  currentFilter = (await storageArea.get(
+    'currentFilter'
+  )).currentFilter ?? 'pixelify'
 
   shouldPixelate = await getCurrentRulePixelation(location.href)
   if (DEBUG) {
