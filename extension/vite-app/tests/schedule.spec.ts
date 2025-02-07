@@ -18,7 +18,7 @@ test('Schedule page', async ({ page, extensionId }) => {
   await expect(eventStart).toBeVisible()
   await expect(eventEnd).toBeVisible()
 
-  await eventStart.fill('13:15')
+  await eventStart.fill('09:00')
   await eventEnd.fill('00:00')
   await rangeEnableButton.click()
   await rangeEnableButton.click()

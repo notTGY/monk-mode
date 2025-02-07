@@ -30,6 +30,13 @@ export function useFilter() {
     setCurrentFilter(FILTERS[newSelectedIndex])
   }
 
+  const val = (newFilter: string) => {
+    const newSelectedIndex = FILTERS.indexOf(newFilter)
+    setSelectedIndex(newSelectedIndex)
+
+    setCurrentFilter(FILTERS[newSelectedIndex])
+  }
+
   const selected = FILTERS[selectedIndex]
 
   return [
@@ -37,5 +44,6 @@ export function useFilter() {
     prev,
     isLoading,
     selected,
+    val,
   ]
 }

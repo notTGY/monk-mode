@@ -1,7 +1,9 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
-import { Redo, ChevronRight, ChevronLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+
 import { useFilter } from '@/hooks/useFilter'
 import { IMAGES } from '@/lib/filter'
 
@@ -17,66 +19,50 @@ export default function Filter() {
     prev,
     isLoadingFilter,
     selectedFilter,
+    val,
   ] = useFilter()
 
-  const image = isLoadingFilter ? og : IMAGES[selectedFilter]
+  const Filters = Object.keys(IMAGES).map((filter: string) => {
+    const id = `filter-${filter}`
+    return (
+      <div key={id} className={clsx(
+        "flex items-start justify-between p-2 rounded border",
+        {
+          'border-primary': filter == selectedFilter,
+          'border-transparent': filter != selectedFilter,
+        }
+      )}>
+        <div className="flex items-center gap-2">
+          <RadioGroupItem
+            value={filter}
+            id={id}
+          />
+          <Label htmlFor={id} className="cursor-pointer">
+            <h2 className="text-lg">{t(filter)}</h2>
+            <p className="text-muted-foreground max-w-64 font-normal">{t(`about.${filter}`)}</p>
+          </Label>
+        </div>
+        <img
+          src={IMAGES[filter]}
+          className="size-32"
+        />
+      </div>
+    )
+  })
 
   return (
     <div className="max-w-3xl space-y-6">
       <h1 className="text-3xl font-bold">
         {t('title')}
       </h1>
-
-      <div className="flex justify-center items-center gap-2">
-        <div className="flex flex-col items-center gap-1">
-          <img src={og} className="size-20 rounded-lg"/>
-          <span>{t('original')}</span>
-        </div>
-        <Redo className="size-8 -scale-y-100"/>
-        <div className="w-40 flex flex-col items-center gap-1">
-          <img
-            src={image}
-            className={clsx("size-32 rounded-lg", {
-              "cursor-pointer": !isLoadingFilter,
-            })}
-            onClick={next}
-          />
-          <div className="flex items-center gap-2 w-full justify-between">
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={prev}
-              disabled={isLoadingFilter}
-              className="size-6 rounded-full"
-            >
-              <ChevronLeft/>
-            </Button>
-            {isLoadingFilter ? (
-              <span
-                className="text-muted-foreground"
-              >
-                {t(`loading`)}
-              </span>
-            ) : (
-              <span
-                className="font-bold cursor-pointer"
-                onClick={next}
-              >
-                {t(selectedFilter)}
-              </span>
-            )}
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={next}
-              disabled={isLoadingFilter}
-              className="size-6 rounded-full"
-            >
-              <ChevronRight/>
-            </Button>
-          </div>
-        </div>
-      </div>
+      <RadioGroup
+        value={selectedFilter}
+        onValueChange={val}
+        disabled={isLoadingFilter}
+        data-testid="filter-group"
+      >
+        {Filters}
+      </RadioGroup>
     </div>
   )
 }

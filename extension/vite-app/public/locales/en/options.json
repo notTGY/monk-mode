@@ -32,8 +32,12 @@
   "filter": {
     "title": "Filter",
     "original": "Original",
-    "darken": "Darken",
+    "loading": "Loading...",
     "pixelify": "Pixelify",
-    "loading": "Loading..."
+    "darken": "Darken",
+    "about": {
+      "pixelify": "Reduce quality of image by averaging pixels between large chunks.",
+      "darken": "Scale luminosity of entire image relatively to it's overall luminosity. This way, colors do not collapse and details remain."
+    }
   }
 }
