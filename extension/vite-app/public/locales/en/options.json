@@ -39,5 +39,10 @@
       "pixelify": "Reduce quality of image by averaging pixels between large chunks.",
       "darken": "Scale luminosity of entire image relatively to it's overall luminosity. This way, colors do not collapse and details remain."
     }
+  },
+  "nude": {
+    "title": "Nudes Detection",
+    "action": "Enable Nude Content Detection",
+    "about": "When enabled pixelify will turn on automatically, if it sees suspicious images on ANY website, not just the ones you explicitly blocked. Detection will be run at all times."
   }
 }

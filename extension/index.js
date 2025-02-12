@@ -7,7 +7,7 @@ const DETECT = 'detect'
 let allImages = []
 let currentStatus = ALLOW
 let currentFilter = 'pixelify'
-let currentNudeDetection = false
+let nudeDetection = false
 
 const toggleShown = async () => {
   if (currentStatus == BLOCK) {
@@ -56,7 +56,7 @@ const processImage = async (image) => {
     console.log('Pixelify error: ', e)
     return null
   }
-  if (currentNudeDetection && currentStatus == DETECT) {
+  if (nudeDetection && currentStatus == DETECT) {
     if (await loadAndThen(image, nude)) {
       image.setAttribute('data-nude', true)
       if (DEBUG) {
@@ -234,9 +234,9 @@ const init = async (url) => {
   currentFilter = (await storageArea.get(
     'currentFilter'
   )).currentFilter ?? ''
-  currentNudeDetection = (await storageArea.get(
-    'currentNudeDetection'
-  )).currentNudeDetection ?? false
+  nudeDetection = (await storageArea.get(
+    'nudeDetection'
+  )).nudeDetection ?? false
 
   const shouldPixelate = await getCurrentRulePixelation(url)
   currentStatus = shouldPixelate ? BLOCK : DETECT
