@@ -1,9 +1,6 @@
-const c = document.createElement('canvas')
-const ctx = c.getContext('2d', { willReadFrequently: true })
-
 const SIZE = 15
 
-const pixelifyLoadedImage = (image) => {
+const pixelify = (image) => {
   let width = image.naturalWidth
   let height = image.naturalHeight
 
@@ -75,18 +72,3 @@ const pixelifyLoadedImage = (image) => {
   }
   return
 }
-
-const pixelify = (image) => new Promise(
-  (resolve, reject) => {
-  const newImage = new Image()
-  newImage.width = image.width
-  newImage.height = image.height
-  newImage.setAttribute('crossorigin', 'anonymous')
-
-  newImage.onload = () => {
-    const res = pixelifyLoadedImage(newImage)
-    resolve(res)
-  }
-  newImage.onerror = reject
-  newImage.src = image.src
-})

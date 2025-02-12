@@ -1,27 +1,35 @@
 const DEBUG = false
 
-let allImages = []
-let shouldPixelate = false
+const ALLOW = 'allow'
+const BLOCK = 'block'
+const DETECT = 'detect'
 
+let allImages = []
+let currentStatus = ALLOW
 let currentFilter = 'pixelify'
+let currentNudeDetection = false
 
 const toggleShown = async () => {
+  if (currentStatus == BLOCK) {
+    currentStatus = ALLOW
+  } else {
+    currentStatus = BLOCK
+  }
   if (DEBUG) {
     console.log('toggling pixelation')
+    console.log({currentStatus})
   }
-  shouldPixelate = !!(shouldPixelate ^ true)
 
   for (const image of allImages) {
-    if (!shouldPixelate) {
-      image.src = image.getAttribute('data-og-src')
+    if (currentStatus == BLOCK) {
+      image.src = image.getAttribute('data-pixelated-src')
       continue
     }
-
-    image.src = image.getAttribute('data-pixelated-src')
+    image.src = image.getAttribute('data-og-src')
   }
-  if (shouldPixelate) {
+  if (currentStatus != ALLOW) {
     await setupListeners()
-  } else {
+  } else if (currentStatus == ALLOW) {
     unbindListeners()
   }
 }
@@ -38,25 +46,34 @@ const processImage = async (image) => {
           console.error('unknown filter', currentFilter)
         }
       case 'pixelify':
-        res = await pixelify(image)
+        res = await loadAndThen(image, pixelify)
         break
       case 'darken':
-        res = await darken(image)
+        res = await loadAndThen(image, darken)
         break
     }
   } catch(e) {
     console.log('Pixelify error: ', e)
     return null
   }
+  if (currentNudeDetection && currentStatus == DETECT) {
+    if (await loadAndThen(image, nude)) {
+      image.setAttribute('data-nude', true)
+      if (DEBUG) {
+        console.log('detected NUDES')
+        image.style.border = '8px solid red'
+      }
+    }
+  }
 
   if (res) {
     image.setAttribute('data-og-src', image.src)
     image.setAttribute('data-pixelated-src', res)
-    if (shouldPixelate) {
+    if (currentStatus == BLOCK) {
       image.src = res
-    }
-    if (image.srcset) {
-      image.srcset = ''
+      if (image.srcset) {
+        image.srcset = ''
+      }
     }
     image.setAttribute('data-substituted', true)
     return image
@@ -70,6 +87,7 @@ const tryPixelating = async () => {
     return
   }
   isBusyPixelating = true
+
   const images = [...document.querySelectorAll(
     'img'
   )]
@@ -78,12 +96,37 @@ const tryPixelating = async () => {
       .filter(image => !allImages.includes(image))
       .map(processImage)
   )
-  allImages = allImages.concat(
-    processedImages
-      .filter(item => item.status == 'fulfilled')
-      .map(item => item.value)
-      .filter(item => item != null)
-  )
+  if (DEBUG) {
+    console.log(
+      'errors',
+      processedImages
+        .filter(item => item.status == 'rejected')
+    )
+  }
+  const newImages = processedImages
+    .filter(item => item.status == 'fulfilled')
+    .map(item => item.value)
+    .filter(item => item != null)
+
+  allImages = allImages.concat(newImages)
+
+  if (currentStatus == DETECT) {
+    if (DEBUG) {
+      console.log('collecting detected')
+    }
+    if (newImages.some(im => im.getAttribute('data-nude'))) {
+      for (const image of allImages) {
+        image.src = image.getAttribute('data-pixelated-src')
+      }
+      currentStatus = BLOCK
+      document.documentElement.setAttribute(
+        'data-pixelify-inited', true
+      )
+      if (DEBUG) {
+        console.log({currentStatus})
+      }
+    }
+  }
   isBusyPixelating = false
 }
 
@@ -118,9 +161,11 @@ const setupListeners = async () => {
     return
   }
   __setupInited = true
-  document.documentElement.setAttribute(
-    'data-pixelify-inited', true
-  )
+  if (currentStatus == BLOCK) {
+    document.documentElement.setAttribute(
+      'data-pixelify-inited', true
+    )
+  }
 
   document.addEventListener('scroll', onEvent)
   document.addEventListener('mousemove', onEvent)
@@ -153,22 +198,30 @@ const unbindListeners = () => {
 
 navigation.addEventListener('navigate', async (e) => {
   const url = new URL(e.destination.url)
-  shouldPixelate = await getCurrentRulePixelation(e.destination.url)
+  init(url)
+  /*
+  const shouldPixelate = await getCurrentRulePixelation(e.destination.url)
+  currentStatus = shouldPixelate ? BLOCK : DETECT
+
+  if (DEBUG) {
+    console.log({currentStatus})
+  }
 
   for (const image of allImages) {
     image.src = image.getAttribute(
-      shouldPixelate
+      currentStatus == BLOCK
         ? 'data-pixelated-src'
         : 'data-og-src'
     )
   }
 
-  if (shouldPixelate) {
+  if (currentStatus == BLOCK) {
     setupListeners()
   }
+  */
 })
 
-const init = async () => {
+const init = async (url) => {
   if (typeof window.__PixelifyInited != 'undefined') {
     return
   }
@@ -181,10 +234,14 @@ const init = async () => {
   currentFilter = (await storageArea.get(
     'currentFilter'
   )).currentFilter ?? ''
+  currentNudeDetection = (await storageArea.get(
+    'currentNudeDetection'
+  )).currentNudeDetection ?? false
 
-  shouldPixelate = await getCurrentRulePixelation(location.href)
+  const shouldPixelate = await getCurrentRulePixelation(url)
+  currentStatus = shouldPixelate ? BLOCK : DETECT
   if (DEBUG) {
-    console.log({shouldPixelate})
+    console.log({currentStatus})
   }
 
   chrome.runtime.onMessage.addListener(
@@ -197,8 +254,9 @@ const init = async () => {
           await toggleShown()
           break
         case 'requestStatus':
+          const shouldPixelate = currentStatus == BLOCK
           if (DEBUG) {
-            console.log({shouldPixelate})
+            console.log({currentStatus})
           }
           await sendResponse({shouldPixelate})
           break
@@ -212,11 +270,18 @@ const init = async () => {
     },
   )
 
+  for (const image of allImages) {
+    image.src = image.getAttribute(
+      currentStatus == BLOCK
+        ? 'data-pixelated-src'
+        : 'data-og-src'
+    )
+  }
 
-  if (shouldPixelate) {
+  if (currentStatus != ALLOW) {
     setupListeners()
   }
 }
 
-document.body.onload = init
-init()
+document.body.onload = () => init(location.href)
+init(location.href)

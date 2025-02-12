@@ -1,6 +1,6 @@
 const MAX_LIGHTNESS = 0.33
 
-const darkenLoadedImage = (image) => {
+const darken = (image) => {
   let width = image.naturalWidth
   let height = image.naturalHeight
 
@@ -46,18 +46,3 @@ const darkenLoadedImage = (image) => {
   }
   return
 }
-
-const darken = (image) => new Promise(
-  (resolve, reject) => {
-  const newImage = new Image()
-  newImage.width = image.width
-  newImage.height = image.height
-  newImage.setAttribute('crossorigin', 'anonymous')
-
-  newImage.onload = () => {
-    const res = darkenLoadedImage(newImage)
-    resolve(res)
-  }
-  newImage.onerror = reject
-  newImage.src = image.src
-})
