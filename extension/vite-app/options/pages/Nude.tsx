@@ -25,6 +25,7 @@ export default function Nude() {
       <div className="flex items-center space-x-4 pt-6">
         <Switch
           id="nude-detection"
+          data-testid="nude-switch"
           checked={isNude}
           onCheckedChange={toggleNude}
           disabled={isLoadingNude}
