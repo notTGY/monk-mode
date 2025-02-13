@@ -18,6 +18,7 @@ export const getCurrentRulePixelation = async (
   if (isRange) {
     const currentMinute = now.getMinutes()
     const t = currentMinute + currentHour * 60
+    let isIn = false
     for (const range of ranges) {
       const [rstart, rend] = range.split('-')
       const [h0, m0] = rstart.split(':')
@@ -29,9 +30,12 @@ export const getCurrentRulePixelation = async (
 
       const t0 = +m0 + 60*(+h0)
       const t1 = +m1 + 60*(+h1)
-      if (t0 > t || t1 < t) {
-        return false
+      if (t >= t0 && t <= t1) {
+        isIn = true
       }
+    }
+    if (!isIn) {
+      return false
     }
   }
 

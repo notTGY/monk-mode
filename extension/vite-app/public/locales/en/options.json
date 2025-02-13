@@ -43,6 +43,6 @@
   "nude": {
     "title": "Nudes Detection",
     "action": "Enable Nude Content Detection",
-    "about": "When enabled pixelify will turn on automatically, if it sees suspicious images on ANY website, not just the ones you explicitly blocked. Detection will be run at all times."
+    "about": "When enabled pixelify will turn on automatically, if it sees suspicious images on ANY website, not just the ones you explicitly blocked. Detection will be run when pixelify is active."
   }
 }

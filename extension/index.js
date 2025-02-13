@@ -234,9 +234,7 @@ const init = async (url) => {
   currentFilter = (await storageArea.get(
     'currentFilter'
   )).currentFilter ?? ''
-  nudeDetection = (await storageArea.get(
-    'nudeDetection'
-  )).nudeDetection ?? false
+  nudeDetection = await getCurrentNudeDetection()
 
   const shouldPixelate = await getCurrentRulePixelation(url)
   currentStatus = shouldPixelate ? BLOCK : DETECT
