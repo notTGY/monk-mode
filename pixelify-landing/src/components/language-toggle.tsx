@@ -88,7 +88,7 @@ function LanguageSwitch({
         {languagesAvailable.map((l) => (
           <DropdownMenuItem
             key={l}
-            className="flex items-center justify-between"
+            className="flex items-center justify-between cursor-pointer"
             asChild
           >
             <a

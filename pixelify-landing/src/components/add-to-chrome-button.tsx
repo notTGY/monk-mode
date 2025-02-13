@@ -12,6 +12,7 @@ export function CtaButton({
       <a
         href={t('cws-link')}
         target="_blank"
+        data-umami-event="cws-action"
       >
         <Button size="lg" className="text-lg py-6 px-3">
           <Chrome className="h-8 w-8" />
@@ -21,6 +22,7 @@ export function CtaButton({
       <a
         href={t('amo-link')}
         target="_blank"
+        data-umami-event="amo-action"
       >
         <Button size="lg" className="text-lg px-2 py-6">
           <Firefox className="h-8 w-8" />
