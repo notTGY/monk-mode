@@ -1,6 +1,12 @@
 # monk-mode
 Disable distractions on the web. This document is also sprint planner/backlog.
 
+
+![screenshot](./docs/screenshot.png)
+
+Example usage
+![example usage](./docs/2-click-screenshot.png)
+
 ## Backlog
 
 ### schedule feature
